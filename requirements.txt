@@ -1,0 +1,22 @@
+# Runtime versions recorded for the frozen Wan adapter training/evaluation.
+# Install the platform-appropriate PyTorch 2.11.0 wheel first; CUDA builds are
+# supplied by the execution environment and are not selected by this file.
+torch==2.11.0
+torchvision==0.26.0
+diffusers==0.36.0
+transformers==4.57.6
+accelerate==1.15.0
+safetensors==0.8.0
+numpy==2.4.6
+Pillow==12.3.0
+huggingface-hub==0.36.2
+imageio==2.38.0
+imageio-ffmpeg==0.6.0
+# Inference verifies the decoded MP4 with OpenCV; this is the actual GPU-runtime build.
+opencv-python==5.0.0.93
+
+# Optional tokenizer prerequisites present in the verified Wan runtime.
+sentencepiece==0.2.2
+protobuf==6.33.6
+ftfy==6.3.1
+tokenizers==0.22.2

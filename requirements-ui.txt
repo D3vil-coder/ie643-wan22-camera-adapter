@@ -1,0 +1,4 @@
+# UI-only pins for the interactive marimo camera demo.
+# Install in the existing GPU inference environment, not the CPU evaluation environment.
+marimo==0.25.2
+anywidget==0.11.0

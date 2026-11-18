@@ -1,0 +1,23 @@
+{
+  "adapter_kind": "wan_flow_control_lora",
+  "model": "Wan-AI/Wan2.2-TI2V-5B-Diffusers",
+  "revision": "b8fff7315c768468a5333511427288870b2e9635",
+  "pipeline": "WanImageToVideoPipeline",
+  "expand_timesteps": true,
+  "frozen_original_transformer": true,
+  "frozen_vae": true,
+  "frozen_text_encoder": true,
+  "video_contract": {"width": 1280, "height": 704, "frames": 121, "fps": 24},
+  "contract_status": "official_inference_reference_GPU_generation_decode_verified_training_pending",
+  "custom_duration_candidates": [49],
+  "format_selection_requires_output_review": true,
+  "architecture": {"hidden": 3072, "rank": 16, "alpha": 16.0, "layers": 16},
+  "target_controls": ["zoom_in", "zoom_out", "pan_left", "pan_right", "tilt_up", "tilt_down"],
+  "stage_a_controls": ["zoom_in", "zoom_out", "static"],
+  "inference_steps": 50,
+  "guidance_scale": 5.0,
+  "flow_shift": 5.0,
+  "checkpoint_every_updates": 250,
+  "checkpoint_every_minutes": 10,
+  "private_backup_before_stage_continuation": true
+}

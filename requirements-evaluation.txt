@@ -1,0 +1,6 @@
+# CPU-only metric/plot stack used in the local evaluation workspace.
+numpy==2.2.6
+Pillow==11.3.0
+opencv-python==4.10.0.84
+matplotlib==3.10.3
+imageio==2.37.0

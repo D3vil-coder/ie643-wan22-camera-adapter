@@ -1,0 +1,29 @@
+{
+  "purpose": "paired_static_input_teacher_relative_camera_velocity",
+  "training_entry": "fpcamera.flow_train_delta",
+  "adapter_kind": "wan_flow_control_lora",
+  "project_root": "/marimo/ie643/camera_phase1",
+  "index": "/marimo/ie643/camera_phase1/data/flow_poc/cache_1280x704_f121_v1/index.jsonl",
+  "output_dir": "/marimo/ie643/camera_phase1/artifacts/flow_poc_all",
+  "architecture": {"hidden": 3072, "rank": 16, "alpha": 16.0, "layers": 16},
+  "video_contract": {"width": 1280, "height": 704, "frames": 121, "fps": 24},
+  "expected_backbone_sha256": "a02044a1e4e535b1edfb1f6a3a1cf99fd18310c53874f157f1be27cef19294ed",
+  "updates": 1000,
+  "effective_batch": 2,
+  "microbatch": 1,
+  "checkpointing": "full",
+  "learning_rate": 0.0001,
+  "warmup": 25,
+  "checkpoint_updates": 25,
+  "max_peak_gib": 80,
+  "seed": 20261025,
+  "camera_modes": ["zoom_in", "zoom_out"],
+  "noise_sampling": {
+    "distribution": "truncated_normal",
+    "mean": 0.8,
+    "std": 0.075,
+    "lower": 0.6,
+    "upper": 1.0
+  },
+  "experiment_hypothesis": "Paired static-input and motion-target predictions can isolate teacher-relative camera velocity while preserving the I2V first frame. Compare opposite commands with matched source, noise, and timestep; loss alone is insufficient."
+}

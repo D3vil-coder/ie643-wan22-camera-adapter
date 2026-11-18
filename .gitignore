@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+artifacts/
+data/**/cache_*/
+data/**/sources/
+outputs/
+runs/
+*.safetensors
+*.pt
+*.ckpt
+*.mp4
+*.zip
+.venv/
+__marimo__/
+.ipynb_checkpoints/
+wandb/

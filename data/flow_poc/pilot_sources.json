@@ -1,0 +1,2724 @@
+{
+  "schema_version": 1,
+  "selection": {
+    "source": "local checkpoint 2/data/coco/manifests/train.json and development.json",
+    "method": "deterministic round-robin over target_category, ordered by category and source_id",
+    "train_count": 32,
+    "development_count": 4,
+    "final_category_holdout_used": false,
+    "source_images_are_byte_copies": true,
+    "training_caption_policy": "neutral caption to isolate motion hint; original captions preserved as metadata"
+  },
+  "source_manifest_totals": {
+    "train": 128,
+    "development": 24
+  },
+  "selected_category_counts": {
+    "train": {
+      "airplane": 1,
+      "apple": 1,
+      "backpack": 1,
+      "banana": 1,
+      "baseball bat": 1,
+      "baseball glove": 1,
+      "bear": 1,
+      "bed": 1,
+      "bench": 1,
+      "boat": 1,
+      "book": 1,
+      "bowl": 1,
+      "broccoli": 1,
+      "bus": 1,
+      "cake": 1,
+      "car": 1,
+      "carrot": 1,
+      "cell phone": 1,
+      "chair": 1,
+      "clock": 1,
+      "couch": 1,
+      "cow": 1,
+      "dining table": 1,
+      "donut": 1,
+      "elephant": 1,
+      "fire hydrant": 1,
+      "fork": 1,
+      "frisbee": 1,
+      "giraffe": 1,
+      "handbag": 1,
+      "hot dog": 1,
+      "keyboard": 1
+    },
+    "development": {
+      "airplane": 1,
+      "apple": 1,
+      "baseball glove": 1,
+      "bowl": 1
+    }
+  },
+  "records": [
+    {
+      "source_id": "coco2017val_000000134886_ann156488",
+      "source_image_id": 134886,
+      "source_annotation_id": 156488,
+      "target_category": "airplane",
+      "original_image_sha256": "a3eb8a72558bd091480d96592617432c273da3842462cc2bf04d65f0bd721f71",
+      "source_image": "train/raw/val2017/000000134886.jpg",
+      "official_captions": [
+        {
+          "image_id": 134886,
+          "id": 721268,
+          "caption": "A large jetliner flying over a dry grass field."
+        },
+        {
+          "image_id": 134886,
+          "id": 728693,
+          "caption": "A commercial airplane above a dirt trail and crowd of people."
+        },
+        {
+          "image_id": 134886,
+          "id": 733343,
+          "caption": "A low flying airplane over a parked silver van. "
+        },
+        {
+          "image_id": 134886,
+          "id": 734138,
+          "caption": "A playing flying over a van with multiple people around it."
+        },
+        {
+          "image_id": 134886,
+          "id": 736013,
+          "caption": "The landing airplane comes in very close to the vehicle in the road."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4128/5048434632_d18999fce8_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4128/5048434632_d18999fce8_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000134886.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000134886.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000134886.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-16 05:17:13",
+          "flickr_url": "http://farm5.staticflickr.com/4128/5048434632_d18999fce8_z.jpg",
+          "id": 134886
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000134886.jpg",
+          "compressed_size": 112044,
+          "size": 112044,
+          "crc32": 2752437958,
+          "offset": 665972932,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000185599_ann1049455",
+      "source_image_id": 185599,
+      "source_annotation_id": 1049455,
+      "target_category": "apple",
+      "original_image_sha256": "1ec4dcc5131d7aba9d71b0e8cd05e278d142c522e1077f5cbc4627da246979f6",
+      "source_image": "train/raw/val2017/000000185599.jpg",
+      "official_captions": [
+        {
+          "image_id": 185599,
+          "id": 61086,
+          "caption": "Many apples and oranges are stacked near to each other."
+        },
+        {
+          "image_id": 185599,
+          "id": 61275,
+          "caption": "an extreme close up of fruits with a white background"
+        },
+        {
+          "image_id": 185599,
+          "id": 61389,
+          "caption": "A handful of apples and oranges sit in a bowl."
+        },
+        {
+          "image_id": 185599,
+          "id": 62118,
+          "caption": "This is a close-up of apples and oranges."
+        },
+        {
+          "image_id": 185599,
+          "id": 63435,
+          "caption": "A detailed close up view of ripe fruit."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm7.staticflickr.com/6094/6883730720_69ac769336_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm7.staticflickr.com/6094/6883730720_69ac769336_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000185599.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000185599.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000185599.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-19 18:37:35",
+          "flickr_url": "http://farm7.staticflickr.com/6094/6883730720_69ac769336_z.jpg",
+          "id": 185599
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000185599.jpg",
+          "compressed_size": 119803,
+          "size": 119803,
+          "crc32": 385775080,
+          "offset": 339344307,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000115245_ann1163771",
+      "source_image_id": 115245,
+      "source_annotation_id": 1163771,
+      "target_category": "backpack",
+      "original_image_sha256": "31967b55cb57fdf83991b7aeb4076d91e4e5be51cda0a9400313014b97ab7eb8",
+      "source_image": "train/raw/val2017/000000115245.jpg",
+      "official_captions": [
+        {
+          "image_id": 115245,
+          "id": 224178,
+          "caption": "A table topped with bags of luggage and purses."
+        },
+        {
+          "image_id": 115245,
+          "id": 228894,
+          "caption": "A table has suitcases leaning on it and clothes on top."
+        },
+        {
+          "image_id": 115245,
+          "id": 233493,
+          "caption": "Luggage and coats lined up at portable tables"
+        },
+        {
+          "image_id": 115245,
+          "id": 236151,
+          "caption": "Several suitcases on wheels leaning up against one long table with chairs."
+        },
+        {
+          "image_id": 115245,
+          "id": 247137,
+          "caption": "Standing suit cases being stored in a room."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8199/8203831740_193863840c_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8199/8203831740_193863840c_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000115245.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000115245.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000115245.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-18 10:23:22",
+          "flickr_url": "http://farm9.staticflickr.com/8199/8203831740_193863840c_z.jpg",
+          "id": 115245
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000115245.jpg",
+          "compressed_size": 153904,
+          "size": 153904,
+          "crc32": 3131730506,
+          "offset": 381339919,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000006012_ann1042786",
+      "source_image_id": 6012,
+      "source_annotation_id": 1042786,
+      "target_category": "banana",
+      "original_image_sha256": "7cd0d627b15c09f373aa613d013fb2d8ae6bd20bcce0d98aa31b963e6bcca495",
+      "source_image": "train/raw/val2017/000000006012.jpg",
+      "official_captions": [
+        {
+          "image_id": 6012,
+          "id": 626831,
+          "caption": "There are bananas around another piece of fruit. "
+        },
+        {
+          "image_id": 6012,
+          "id": 632333,
+          "caption": "a yellow and red apple and some bananas"
+        },
+        {
+          "image_id": 6012,
+          "id": 632696,
+          "caption": "An apple sits in between a bunch of bananas"
+        },
+        {
+          "image_id": 6012,
+          "id": 633626,
+          "caption": "A bunch of bananas with an apple sitting in the middle."
+        },
+        {
+          "image_id": 6012,
+          "id": 635246,
+          "caption": "Six bananas and a red fruit make an artistic sight paired with a blue background."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4030/4281955635_f02ce45926_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4030/4281955635_f02ce45926_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000006012.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000006012.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000006012.jpg",
+          "height": 531,
+          "width": 640,
+          "date_captured": "2013-11-19 21:15:17",
+          "flickr_url": "http://farm5.staticflickr.com/4030/4281955635_f02ce45926_z.jpg",
+          "id": 6012
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000006012.jpg",
+          "compressed_size": 166135,
+          "size": 166135,
+          "crc32": 2747165847,
+          "offset": 282508941,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000057232_ann2231955",
+      "source_image_id": 57232,
+      "source_annotation_id": 2231955,
+      "target_category": "baseball bat",
+      "original_image_sha256": "d2608c361bce2a50706e7b840819dbc3c01147bacfe35752c4ff59ebb467ce93",
+      "source_image": "train/raw/val2017/000000057232.jpg",
+      "official_captions": [
+        {
+          "image_id": 57232,
+          "id": 143960,
+          "caption": "Old baseball bats are turned into a seat."
+        },
+        {
+          "image_id": 57232,
+          "id": 149789,
+          "caption": "A chair is made of bats and baseball bases."
+        },
+        {
+          "image_id": 57232,
+          "id": 151034,
+          "caption": "A chair is fashioned from baseball bats and two cushions."
+        },
+        {
+          "image_id": 57232,
+          "id": 152555,
+          "caption": "A picture of some toys and a box."
+        },
+        {
+          "image_id": 57232,
+          "id": 155375,
+          "caption": "Two white cushions on a chair made of baseball bats."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8119/8693708685_4b469e01aa_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8119/8693708685_4b469e01aa_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000057232.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000057232.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000057232.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-21 00:35:28",
+          "flickr_url": "http://farm9.staticflickr.com/8119/8693708685_4b469e01aa_z.jpg",
+          "id": 57232
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000057232.jpg",
+          "compressed_size": 229950,
+          "size": 229950,
+          "crc32": 3863779873,
+          "offset": 435513933,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000126226_ann633759",
+      "source_image_id": 126226,
+      "source_annotation_id": 633759,
+      "target_category": "baseball glove",
+      "original_image_sha256": "731fc25ddb12d91a6799cc9f96308c7afe48fdcfc98f75967d1217e46ce3c285",
+      "source_image": "train/raw/val2017/000000126226.jpg",
+      "official_captions": [
+        {
+          "image_id": 126226,
+          "id": 101815,
+          "caption": "A group of guys in  a dugout with their gear "
+        },
+        {
+          "image_id": 126226,
+          "id": 114880,
+          "caption": "A group of baseball players sit with their gear in the dugout."
+        },
+        {
+          "image_id": 126226,
+          "id": 116383,
+          "caption": "Some baseball players sitting in a dugout watching a game"
+        },
+        {
+          "image_id": 126226,
+          "id": 121225,
+          "caption": "A dug out filled with baseball players next to baseball equipment."
+        },
+        {
+          "image_id": 126226,
+          "id": 150988,
+          "caption": "Many caps and gloves sit in front of the players in a baseball dugout."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4070/4681815918_22d33d6556_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4070/4681815918_22d33d6556_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000126226.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000126226.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000126226.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-16 16:05:03",
+          "flickr_url": "http://farm5.staticflickr.com/4070/4681815918_22d33d6556_z.jpg",
+          "id": 126226
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000126226.jpg",
+          "compressed_size": 252188,
+          "size": 252188,
+          "crc32": 1953103244,
+          "offset": 319916246,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000173033_ann586679",
+      "source_image_id": 173033,
+      "source_annotation_id": 586679,
+      "target_category": "bear",
+      "original_image_sha256": "07d41032e885a982cc42f7c2eda86732de7ba5eff15268cfbe7e6e32a4d63842",
+      "source_image": "train/raw/val2017/000000173033.jpg",
+      "official_captions": [
+        {
+          "image_id": 173033,
+          "id": 269541,
+          "caption": "A replica of a bear and her cub in a glass case in an exhibit."
+        },
+        {
+          "image_id": 173033,
+          "id": 270753,
+          "caption": "An exhibit of a bear and it's cub."
+        },
+        {
+          "image_id": 173033,
+          "id": 273996,
+          "caption": "A bear and cub on a marble display."
+        },
+        {
+          "image_id": 173033,
+          "id": 275958,
+          "caption": "A display of a momma bear and her cub."
+        },
+        {
+          "image_id": 173033,
+          "id": 276741,
+          "caption": "A big black bear standing with a baby bear."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm6.staticflickr.com/5543/9489245095_355d343972_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm6.staticflickr.com/5543/9489245095_355d343972_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000173033.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000173033.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000173033.jpg",
+          "height": 640,
+          "width": 480,
+          "date_captured": "2013-11-18 12:53:45",
+          "flickr_url": "http://farm6.staticflickr.com/5543/9489245095_355d343972_z.jpg",
+          "id": 173033
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000173033.jpg",
+          "compressed_size": 160582,
+          "size": 160582,
+          "crc32": 3336398658,
+          "offset": 280549181,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000460333_ann316432",
+      "source_image_id": 460333,
+      "source_annotation_id": 316432,
+      "target_category": "bed",
+      "original_image_sha256": "2443db7f57590ca2d38f600949cc89bf90ef36ed7b7343142a0afde657f75e96",
+      "source_image": "train/raw/val2017/000000460333.jpg",
+      "official_captions": [
+        {
+          "image_id": 460333,
+          "id": 615012,
+          "caption": "A young boy sitting on a bed in a bedroom."
+        },
+        {
+          "image_id": 460333,
+          "id": 615861,
+          "caption": "a young boy sitting on a bed with a lamp on beside it"
+        },
+        {
+          "image_id": 460333,
+          "id": 615900,
+          "caption": "a kid is sitting on a small bed in a room"
+        },
+        {
+          "image_id": 460333,
+          "id": 616431,
+          "caption": "A little boy sits on a bed with a chair next to it."
+        },
+        {
+          "image_id": 460333,
+          "id": 617286,
+          "caption": "The child is waiting for his parents to come in."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8457/7952261340_c1a243c043_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8457/7952261340_c1a243c043_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000460333.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000460333.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000460333.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-21 01:04:51",
+          "flickr_url": "http://farm9.staticflickr.com/8457/7952261340_c1a243c043_z.jpg",
+          "id": 460333
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000460333.jpg",
+          "compressed_size": 181135,
+          "size": 181135,
+          "crc32": 1051089888,
+          "offset": 514163362,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000327890_ann577292",
+      "source_image_id": 327890,
+      "source_annotation_id": 577292,
+      "target_category": "bench",
+      "original_image_sha256": "92b54b3e01c17d1a8d2b2b9d6995eb1a1a43c6cce9dd491d38e7078030a7d4f4",
+      "source_image": "train/raw/val2017/000000327890.jpg",
+      "official_captions": [
+        {
+          "image_id": 327890,
+          "id": 54298,
+          "caption": "There are some benches arranged together in an open park"
+        },
+        {
+          "image_id": 327890,
+          "id": 57115,
+          "caption": "photo of three benches for sitting facing each other"
+        },
+        {
+          "image_id": 327890,
+          "id": 58030,
+          "caption": "Three empty park benches sitting next to orange and pink walls."
+        },
+        {
+          "image_id": 327890,
+          "id": 59110,
+          "caption": "A group of park benches under a pavilion."
+        },
+        {
+          "image_id": 327890,
+          "id": 59131,
+          "caption": "Three empty benches face each other beneath a canopy."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "id": 5,
+        "name": "Attribution-ShareAlike License"
+      },
+      "original_license_id": 5,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3753/9577665459_f56dac03f1_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3753/9577665459_f56dac03f1_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000327890.jpg",
+        "original_image_metadata": {
+          "license": 5,
+          "file_name": "000000327890.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000327890.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-16 21:20:23",
+          "flickr_url": "http://farm4.staticflickr.com/3753/9577665459_f56dac03f1_z.jpg",
+          "id": 327890
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000327890.jpg",
+          "compressed_size": 236569,
+          "size": 236569,
+          "crc32": 138565925,
+          "offset": 478619437,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000421757_ann181494",
+      "source_image_id": 421757,
+      "source_annotation_id": 181494,
+      "target_category": "boat",
+      "original_image_sha256": "63abbe798cbe8d8647ba305822ea2e068fe92e7d3234b12a976d96a23abb0a82",
+      "source_image": "train/raw/val2017/000000421757.jpg",
+      "official_captions": [
+        {
+          "image_id": 421757,
+          "id": 42446,
+          "caption": "Two boats are floating on the river near the shore."
+        },
+        {
+          "image_id": 421757,
+          "id": 42944,
+          "caption": "Two boats floating next to each other on a lake."
+        },
+        {
+          "image_id": 421757,
+          "id": 44381,
+          "caption": "two boats are idly floating on a lake."
+        },
+        {
+          "image_id": 421757,
+          "id": 47558,
+          "caption": "Two boats floating on a lake next to a forest."
+        },
+        {
+          "image_id": 421757,
+          "id": 47561,
+          "caption": "Two white boats travel on a wooded waterway."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm3.staticflickr.com/2890/9687057660_72532be23b_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm3.staticflickr.com/2890/9687057660_72532be23b_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000421757.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000421757.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000421757.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-18 05:03:47",
+          "flickr_url": "http://farm3.staticflickr.com/2890/9687057660_72532be23b_z.jpg",
+          "id": 421757
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000421757.jpg",
+          "compressed_size": 158241,
+          "size": 158241,
+          "crc32": 2498767916,
+          "offset": 243509528,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000389315_ann1662058",
+      "source_image_id": 389315,
+      "source_annotation_id": 1662058,
+      "target_category": "book",
+      "original_image_sha256": "b05498893037eedd4c1781b6dd8cdabfe77b008ad643fcf9b5e7213491a230be",
+      "source_image": "train/raw/val2017/000000389315.jpg",
+      "official_captions": [
+        {
+          "image_id": 389315,
+          "id": 147111,
+          "caption": "Altered photograph of a case full of paperback novels"
+        },
+        {
+          "image_id": 389315,
+          "id": 148038,
+          "caption": "There is a suitcase that is full of books"
+        },
+        {
+          "image_id": 389315,
+          "id": 148062,
+          "caption": "A luggage bag filled entirely with reading books. "
+        },
+        {
+          "image_id": 389315,
+          "id": 156291,
+          "caption": "Books are piled up in an open suitcase."
+        },
+        {
+          "image_id": 389315,
+          "id": 158613,
+          "caption": "A briefcase full of old used books on sale"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3444/5803230115_2b538ac900_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3444/5803230115_2b538ac900_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000389315.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000389315.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000389315.jpg",
+          "height": 640,
+          "width": 640,
+          "date_captured": "2013-11-18 07:30:22",
+          "flickr_url": "http://farm4.staticflickr.com/3444/5803230115_2b538ac900_z.jpg",
+          "id": 389315
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000389315.jpg",
+          "compressed_size": 275268,
+          "size": 275268,
+          "crc32": 3191317755,
+          "offset": 586687881,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000008277_ann716953",
+      "source_image_id": 8277,
+      "source_annotation_id": 716953,
+      "target_category": "bowl",
+      "original_image_sha256": "692fc5469af5fffdc0dac05e709a0ac1380dca32d4c57436903b122f3c3558dc",
+      "source_image": "train/raw/val2017/000000008277.jpg",
+      "official_captions": [
+        {
+          "image_id": 8277,
+          "id": 94066,
+          "caption": "The meal consists of chopped chicken with cheese and brocolli."
+        },
+        {
+          "image_id": 8277,
+          "id": 95287,
+          "caption": "A styrofoam plate with shredded chicken and a dish of broccoli with cheese sauce."
+        },
+        {
+          "image_id": 8277,
+          "id": 95557,
+          "caption": "a close up of a plate of food on a carpeted floor"
+        },
+        {
+          "image_id": 8277,
+          "id": 108301,
+          "caption": "A plate of shredded chicken with a broccoli cheese sauce."
+        },
+        {
+          "image_id": 8277,
+          "id": 110209,
+          "caption": "A white plate topped wti chicken and a cup of guacamole."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm8.staticflickr.com/7298/9145149580_87e4c26baa_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm8.staticflickr.com/7298/9145149580_87e4c26baa_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000008277.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000008277.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000008277.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-24 14:31:33",
+          "flickr_url": "http://farm8.staticflickr.com/7298/9145149580_87e4c26baa_z.jpg",
+          "id": 8277
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000008277.jpg",
+          "compressed_size": 206878,
+          "size": 206878,
+          "crc32": 4052572491,
+          "offset": 25817622,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000050331_ann1559974",
+      "source_image_id": 50331,
+      "source_annotation_id": 1559974,
+      "target_category": "broccoli",
+      "original_image_sha256": "2b2f516489343749b236c3c834831dfb82bad6fe053585717a0dd53964f234c4",
+      "source_image": "train/raw/val2017/000000050331.jpg",
+      "official_captions": [
+        {
+          "image_id": 50331,
+          "id": 576442,
+          "caption": "The fresh vegetables are growing in the garden."
+        },
+        {
+          "image_id": 50331,
+          "id": 586360,
+          "caption": "Some vegetables on the ground are in planters."
+        },
+        {
+          "image_id": 50331,
+          "id": 588211,
+          "caption": "Planters with growing broccoli in them on the ground "
+        },
+        {
+          "image_id": 50331,
+          "id": 589360,
+          "caption": "Two clay pots with leafy green plants in them."
+        },
+        {
+          "image_id": 50331,
+          "id": 589417,
+          "caption": "broccoli plants growing in brown planters near sand"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3148/2543913854_76c6f40865_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3148/2543913854_76c6f40865_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000050331.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000050331.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000050331.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-19 22:04:41",
+          "flickr_url": "http://farm4.staticflickr.com/3148/2543913854_76c6f40865_z.jpg",
+          "id": 50331
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000050331.jpg",
+          "compressed_size": 164544,
+          "size": 164544,
+          "crc32": 283165097,
+          "offset": 186203191,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000203294_ann366097",
+      "source_image_id": 203294,
+      "source_annotation_id": 366097,
+      "target_category": "bus",
+      "original_image_sha256": "c5d43fb94e11fae1e3bf97b08bebb4a96d7735bb92a6bab8bf8618000208ef9c",
+      "source_image": "train/raw/val2017/000000203294.jpg",
+      "official_captions": [
+        {
+          "image_id": 203294,
+          "id": 93787,
+          "caption": "A tour bus with a cats face painted on the front of it"
+        },
+        {
+          "image_id": 203294,
+          "id": 96814,
+          "caption": "a bus with a kitty face on the front of it"
+        },
+        {
+          "image_id": 203294,
+          "id": 96964,
+          "caption": "People standing next to a bus with a cat face on the front."
+        },
+        {
+          "image_id": 203294,
+          "id": 110272,
+          "caption": "A large bus parked in a parking lot next to a group of women."
+        },
+        {
+          "image_id": 203294,
+          "id": 122116,
+          "caption": "Three women standing near a bus that has the face of a cat painted on the front."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8398/8686137020_2ca292f1dd_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8398/8686137020_2ca292f1dd_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000203294.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000203294.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000203294.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-16 22:30:35",
+          "flickr_url": "http://farm9.staticflickr.com/8398/8686137020_2ca292f1dd_z.jpg",
+          "id": 203294
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000203294.jpg",
+          "compressed_size": 241482,
+          "size": 241482,
+          "crc32": 1729714022,
+          "offset": 182935813,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000085195_ann1084595",
+      "source_image_id": 85195,
+      "source_annotation_id": 1084595,
+      "target_category": "cake",
+      "original_image_sha256": "2d2bb2aa6f3f14bec72d764a7e265576fd4403922d4840af927be8a2c7ad00c7",
+      "source_image": "train/raw/val2017/000000085195.jpg",
+      "official_captions": [
+        {
+          "image_id": 85195,
+          "id": 541192,
+          "caption": "A white plate topped with an icing and sauce covered dessert."
+        },
+        {
+          "image_id": 85195,
+          "id": 542647,
+          "caption": "a slice of cake with some syrup next to it "
+        },
+        {
+          "image_id": 85195,
+          "id": 544453,
+          "caption": "some kind of cake that is on a white plate"
+        },
+        {
+          "image_id": 85195,
+          "id": 549478,
+          "caption": "A small desert with a fork next to it. "
+        },
+        {
+          "image_id": 85195,
+          "id": 551521,
+          "caption": "A plate with an orange cake dessert and a fork."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm8.staticflickr.com/7230/7166884462_882bb03333_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm8.staticflickr.com/7230/7166884462_882bb03333_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000085195.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000085195.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000085195.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-20 23:59:01",
+          "flickr_url": "http://farm8.staticflickr.com/7230/7166884462_882bb03333_z.jpg",
+          "id": 85195
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000085195.jpg",
+          "compressed_size": 167611,
+          "size": 167611,
+          "crc32": 2918056685,
+          "offset": 222232289,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000423617_ann139476",
+      "source_image_id": 423617,
+      "source_annotation_id": 139476,
+      "target_category": "car",
+      "original_image_sha256": "ce5546bb400da57646e0de544763fc44c925fc5495e764083f2bcfebba5c76f0",
+      "source_image": "train/raw/val2017/000000423617.jpg",
+      "official_captions": [
+        {
+          "image_id": 423617,
+          "id": 63033,
+          "caption": "a wet road busy with traffic like a taxi and bus"
+        },
+        {
+          "image_id": 423617,
+          "id": 69969,
+          "caption": "Two buses and a taxi go down a street,"
+        },
+        {
+          "image_id": 423617,
+          "id": 70155,
+          "caption": "Two city buses traveling down a rain covered road way."
+        },
+        {
+          "image_id": 423617,
+          "id": 70491,
+          "caption": "An overview of traffic on a wet day."
+        },
+        {
+          "image_id": 423617,
+          "id": 73551,
+          "caption": "a number of vehicles driving down a road"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8479/8195678412_8d8d906379_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8479/8195678412_8d8d906379_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000423617.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000423617.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000423617.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-17 00:28:01",
+          "flickr_url": "http://farm9.staticflickr.com/8479/8195678412_8d8d906379_z.jpg",
+          "id": 423617
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000423617.jpg",
+          "compressed_size": 219982,
+          "size": 219982,
+          "crc32": 4249342973,
+          "offset": 118495992,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000116362_ann2115595",
+      "source_image_id": 116362,
+      "source_annotation_id": 2115595,
+      "target_category": "carrot",
+      "original_image_sha256": "016c0d06fa81cdd90a9516c582b0627fc091ca00030db77a903f3db2b310e2ca",
+      "source_image": "train/raw/val2017/000000116362.jpg",
+      "official_captions": [
+        {
+          "image_id": 116362,
+          "id": 123801,
+          "caption": "A bowl filled with food on top of a wooden table."
+        },
+        {
+          "image_id": 116362,
+          "id": 129627,
+          "caption": "A small bowl filled with chopped vegetables and spoon"
+        },
+        {
+          "image_id": 116362,
+          "id": 144078,
+          "caption": "A bowl of food sits prepared with eating utensils."
+        },
+        {
+          "image_id": 116362,
+          "id": 164301,
+          "caption": "A bowl with a bunch of food in it sitting on a table"
+        },
+        {
+          "image_id": 116362,
+          "id": 165981,
+          "caption": "Grainy photograph of thinly sliced fruit in a bowl"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3265/5839036384_1ecac4f59a_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3265/5839036384_1ecac4f59a_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000116362.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000116362.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000116362.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-19 22:18:28",
+          "flickr_url": "http://farm4.staticflickr.com/3265/5839036384_1ecac4f59a_z.jpg",
+          "id": 116362
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000116362.jpg",
+          "compressed_size": 115541,
+          "size": 115541,
+          "crc32": 2670020182,
+          "offset": 334920342,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000228981_ann322915",
+      "source_image_id": 228981,
+      "source_annotation_id": 322915,
+      "target_category": "cell phone",
+      "original_image_sha256": "998b5ff0b94372b72110d7a058de328c8142ad87d0c0de346e6073c3f92e501d",
+      "source_image": "train/raw/val2017/000000228981.jpg",
+      "official_captions": [
+        {
+          "image_id": 228981,
+          "id": 374389,
+          "caption": "A smart phone, digital camera and mobile phone on display."
+        },
+        {
+          "image_id": 228981,
+          "id": 376327,
+          "caption": "A table with three different electronic devices. "
+        },
+        {
+          "image_id": 228981,
+          "id": 376795,
+          "caption": "A pocket PC, digital camera, and old cell phone. "
+        },
+        {
+          "image_id": 228981,
+          "id": 377995,
+          "caption": "three different kinds of electronic devices all in a row"
+        },
+        {
+          "image_id": 228981,
+          "id": 379897,
+          "caption": "A close up of a PDA, digital camera and a music player."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm1.staticflickr.com/12/16227769_2dae23e09e_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm1.staticflickr.com/12/16227769_2dae23e09e_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000228981.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000228981.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000228981.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-24 09:46:33",
+          "flickr_url": "http://farm1.staticflickr.com/12/16227769_2dae23e09e_z.jpg",
+          "id": 228981
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000228981.jpg",
+          "compressed_size": 69480,
+          "size": 69480,
+          "crc32": 1218327532,
+          "offset": 516513934,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000298396_ann1583575",
+      "source_image_id": 298396,
+      "source_annotation_id": 1583575,
+      "target_category": "chair",
+      "original_image_sha256": "71bc39fad606fb0e3dc6072cedbd7c2dc1f79ae6e5964626d27dbee0a62df511",
+      "source_image": "train/raw/val2017/000000298396.jpg",
+      "official_captions": [
+        {
+          "image_id": 298396,
+          "id": 25178,
+          "caption": "Kitchen area with counter top space and dining room table. "
+        },
+        {
+          "image_id": 298396,
+          "id": 29483,
+          "caption": "A fully-stocked kitchen with no one in it."
+        },
+        {
+          "image_id": 298396,
+          "id": 31025,
+          "caption": "An old style kitchen with baby blue cabinets."
+        },
+        {
+          "image_id": 298396,
+          "id": 31469,
+          "caption": "A very clean and cozy looking kitchen that could be in a home magazine."
+        },
+        {
+          "image_id": 298396,
+          "id": 33809,
+          "caption": "A kitchen filled with appliances dishes and a bowl of fruit."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "id": 5,
+        "name": "Attribution-ShareAlike License"
+      },
+      "original_license_id": 5,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm7.staticflickr.com/6052/6348486215_b05f6c9f3c_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm7.staticflickr.com/6052/6348486215_b05f6c9f3c_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000298396.jpg",
+        "original_image_metadata": {
+          "license": 5,
+          "file_name": "000000298396.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000298396.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-14 20:26:18",
+          "flickr_url": "http://farm7.staticflickr.com/6052/6348486215_b05f6c9f3c_z.jpg",
+          "id": 298396
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000298396.jpg",
+          "compressed_size": 246314,
+          "size": 246314,
+          "crc32": 128143861,
+          "offset": 81989754,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000007888_ann335057",
+      "source_image_id": 7888,
+      "source_annotation_id": 335057,
+      "target_category": "clock",
+      "original_image_sha256": "7c735e89b3699afc510053412ddea8e0370a1a5a2c9096713a5b255567747442",
+      "source_image": "train/raw/val2017/000000007888.jpg",
+      "official_captions": [
+        {
+          "image_id": 7888,
+          "id": 399944,
+          "caption": "A pedestal clock strikes 6:55 in a rainy sky."
+        },
+        {
+          "image_id": 7888,
+          "id": 400070,
+          "caption": "The image has a large cubed clock on a post."
+        },
+        {
+          "image_id": 7888,
+          "id": 517991,
+          "caption": "A poll that has a clock on the top of it."
+        },
+        {
+          "image_id": 7888,
+          "id": 518375,
+          "caption": "We are looking up at a large square clock on a pole."
+        },
+        {
+          "image_id": 7888,
+          "id": 518855,
+          "caption": "Four sided clock up on a black post. "
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8177/8011171833_87909e07b4_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8177/8011171833_87909e07b4_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000007888.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000007888.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000007888.jpg",
+          "height": 640,
+          "width": 638,
+          "date_captured": "2013-11-24 15:25:32",
+          "flickr_url": "http://farm9.staticflickr.com/8177/8011171833_87909e07b4_z.jpg",
+          "id": 7888
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000007888.jpg",
+          "compressed_size": 132380,
+          "size": 132380,
+          "crc32": 3953021698,
+          "offset": 551638922,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000322895_ann99713",
+      "source_image_id": 322895,
+      "source_annotation_id": 99713,
+      "target_category": "couch",
+      "original_image_sha256": "425807b2f0ee39ab58daaa53b4bbe532a708fe44917c2ce608be58d040566583",
+      "source_image": "train/raw/val2017/000000322895.jpg",
+      "official_captions": [
+        {
+          "image_id": 322895,
+          "id": 502560,
+          "caption": "A living room that has a bunch of different couches."
+        },
+        {
+          "image_id": 322895,
+          "id": 504351,
+          "caption": "A living room filled with furniture next to a window."
+        },
+        {
+          "image_id": 322895,
+          "id": 509223,
+          "caption": "A living room with white walls, rectangular windows, and grey and red furniture. "
+        },
+        {
+          "image_id": 322895,
+          "id": 511863,
+          "caption": "A room with a couch, chairs, television and a table. "
+        },
+        {
+          "image_id": 322895,
+          "id": 546939,
+          "caption": "A room with a full wall of windows with multiple sofas and chairs."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm3.staticflickr.com/2488/3902330436_860c490a85_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm3.staticflickr.com/2488/3902330436_860c490a85_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000322895.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000322895.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000322895.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-22 01:33:28",
+          "flickr_url": "http://farm3.staticflickr.com/2488/3902330436_860c490a85_z.jpg",
+          "id": 322895
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000322895.jpg",
+          "compressed_size": 67340,
+          "size": 67340,
+          "crc32": 223846897,
+          "offset": 778749773,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000133778_ann75473",
+      "source_image_id": 133778,
+      "source_annotation_id": 75473,
+      "target_category": "cow",
+      "original_image_sha256": "cdb93a269a84fd38fbe1081efe715586bd4d693bfa11d7f8c9a38ead4996d093",
+      "source_image": "train/raw/val2017/000000133778.jpg",
+      "official_captions": [
+        {
+          "image_id": 133778,
+          "id": 43952,
+          "caption": "A young calf drinks from its mother's udders"
+        },
+        {
+          "image_id": 133778,
+          "id": 45347,
+          "caption": "A mother cow with a young calf feeding in a grassy area."
+        },
+        {
+          "image_id": 133778,
+          "id": 51155,
+          "caption": "a calf suckingling on a cows utters in grass"
+        },
+        {
+          "image_id": 133778,
+          "id": 51623,
+          "caption": "A baby cattle is being fed by its mother."
+        },
+        {
+          "image_id": 133778,
+          "id": 53504,
+          "caption": "A brown calf drinking milk from its mother."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "id": 5,
+        "name": "Attribution-ShareAlike License"
+      },
+      "original_license_id": 5,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8481/8196665872_54969ddafa_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8481/8196665872_54969ddafa_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000133778.jpg",
+        "original_image_metadata": {
+          "license": 5,
+          "file_name": "000000133778.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000133778.jpg",
+          "height": 483,
+          "width": 640,
+          "date_captured": "2013-11-17 18:52:02",
+          "flickr_url": "http://farm9.staticflickr.com/8481/8196665872_54969ddafa_z.jpg",
+          "id": 133778
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000133778.jpg",
+          "compressed_size": 234118,
+          "size": 234118,
+          "crc32": 145340355,
+          "offset": 308669327,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000112378_ann1964219",
+      "source_image_id": 112378,
+      "source_annotation_id": 1964219,
+      "target_category": "dining table",
+      "original_image_sha256": "0fc1b2deb7e443d27c15478dbbe4fa7174732d733e65dafaca2b8b3b32a0ba46",
+      "source_image": "train/raw/val2017/000000112378.jpg",
+      "official_captions": [
+        {
+          "image_id": 112378,
+          "id": 189892,
+          "caption": "A wooden table topped with a bunch of green bananas."
+        },
+        {
+          "image_id": 112378,
+          "id": 192952,
+          "caption": "A bunch of bananas on a wooden bench with hammocks in the background."
+        },
+        {
+          "image_id": 112378,
+          "id": 193945,
+          "caption": "a table covered with banansas and a coconut"
+        },
+        {
+          "image_id": 112378,
+          "id": 195331,
+          "caption": "Some green bananas and coconuts are sitting on a picnic table. "
+        },
+        {
+          "image_id": 112378,
+          "id": 196879,
+          "caption": "Some bananas and coconuts sitting on a wooden bench."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8198/8170700668_d50718d41f_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8198/8170700668_d50718d41f_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000112378.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000112378.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000112378.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-19 20:11:36",
+          "flickr_url": "http://farm9.staticflickr.com/8198/8170700668_d50718d41f_z.jpg",
+          "id": 112378
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000112378.jpg",
+          "compressed_size": 354538,
+          "size": 354538,
+          "crc32": 37704237,
+          "offset": 520633949,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000326462_ann1079556",
+      "source_image_id": 326462,
+      "source_annotation_id": 1079556,
+      "target_category": "donut",
+      "original_image_sha256": "8749de195b3b7f7f5c59fcca6277e8418332ac925fd4b86c2c19de433e1c3682",
+      "source_image": "train/raw/val2017/000000326462.jpg",
+      "official_captions": [
+        {
+          "image_id": 326462,
+          "id": 267564,
+          "caption": "Pink donut with white sprinkles on the top of it. "
+        },
+        {
+          "image_id": 326462,
+          "id": 267690,
+          "caption": "a person holds a doughnut with sprinkles on it "
+        },
+        {
+          "image_id": 326462,
+          "id": 269154,
+          "caption": "A red icing doughnut with sprinkles on top."
+        },
+        {
+          "image_id": 326462,
+          "id": 271254,
+          "caption": "A person holding a donut with a napkin."
+        },
+        {
+          "image_id": 326462,
+          "id": 271527,
+          "caption": "A person is holding a doughnut with sprinkles."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8389/8628664270_5b2410b3b1_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8389/8628664270_5b2410b3b1_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000326462.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000326462.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000326462.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-20 14:31:45",
+          "flickr_url": "http://farm9.staticflickr.com/8389/8628664270_5b2410b3b1_z.jpg",
+          "id": 326462
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000326462.jpg",
+          "compressed_size": 128397,
+          "size": 128397,
+          "crc32": 694100033,
+          "offset": 417786514,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000097230_ann584061",
+      "source_image_id": 97230,
+      "source_annotation_id": 584061,
+      "target_category": "elephant",
+      "original_image_sha256": "e1052bf5d22c952fb33bc0a068857b01009877f1a507e0133252ea1391e7675c",
+      "source_image": "train/raw/val2017/000000097230.jpg",
+      "official_captions": [
+        {
+          "image_id": 97230,
+          "id": 349581,
+          "caption": "Two elephants are eating some leaves by the road."
+        },
+        {
+          "image_id": 97230,
+          "id": 350307,
+          "caption": "There are two elephants standing in tall brush"
+        },
+        {
+          "image_id": 97230,
+          "id": 353838,
+          "caption": "two elephants standing in some bushes beside a trail "
+        },
+        {
+          "image_id": 97230,
+          "id": 357870,
+          "caption": "Two elephants are facing each other on the side of a dirt road"
+        },
+        {
+          "image_id": 97230,
+          "id": 358626,
+          "caption": "Those elephants seem to be roaming in the wild."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "id": 2,
+        "name": "Attribution-NonCommercial License"
+      },
+      "original_license_id": 2,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4057/4639990283_c4a2364582_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4057/4639990283_c4a2364582_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000097230.jpg",
+        "original_image_metadata": {
+          "license": 2,
+          "file_name": "000000097230.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000097230.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-18 01:00:06",
+          "flickr_url": "http://farm5.staticflickr.com/4057/4639990283_c4a2364582_z.jpg",
+          "id": 97230
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000097230.jpg",
+          "compressed_size": 187798,
+          "size": 187798,
+          "crc32": 374955900,
+          "offset": 187979968,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000204871_ann2197916",
+      "source_image_id": 204871,
+      "source_annotation_id": 2197916,
+      "target_category": "fire hydrant",
+      "original_image_sha256": "f471e48c808ea689a1e3a4a1214bc03e81a95195146b0c42601dbd6eaa006c89",
+      "source_image": "train/raw/val2017/000000204871.jpg",
+      "official_captions": [
+        {
+          "image_id": 204871,
+          "id": 456187,
+          "caption": "A red fire hydrant with a sticker of several animals on it"
+        },
+        {
+          "image_id": 204871,
+          "id": 458125,
+          "caption": "A fire hydrant with a sticker of different animals on it."
+        },
+        {
+          "image_id": 204871,
+          "id": 458284,
+          "caption": "A fire hydrant is sitting on a street corner."
+        },
+        {
+          "image_id": 204871,
+          "id": 458935,
+          "caption": "A red fire hydrant with graphic art decal."
+        },
+        {
+          "image_id": 204871,
+          "id": 825822,
+          "caption": "A sticker has been placed onto a fire hydrant on a sidewalk."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm9.staticflickr.com/8352/8301686238_c8f6ee0544_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm9.staticflickr.com/8352/8301686238_c8f6ee0544_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000204871.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000204871.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000204871.jpg",
+          "height": 612,
+          "width": 612,
+          "date_captured": "2013-11-16 22:31:12",
+          "flickr_url": "http://farm9.staticflickr.com/8352/8301686238_c8f6ee0544_z.jpg",
+          "id": 204871
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000204871.jpg",
+          "compressed_size": 152642,
+          "size": 152642,
+          "crc32": 3026058471,
+          "offset": 797716836,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000452084_ann689509",
+      "source_image_id": 452084,
+      "source_annotation_id": 689509,
+      "target_category": "fork",
+      "original_image_sha256": "cde28c002bf0c170efe8b949d53d36cca3673cc49242171d44de9c7e88494b87",
+      "source_image": "train/raw/val2017/000000452084.jpg",
+      "official_captions": [
+        {
+          "image_id": 452084,
+          "id": 522764,
+          "caption": "A lunch bowl with bread, sausage, tomato, and egg. "
+        },
+        {
+          "image_id": 452084,
+          "id": 522767,
+          "caption": "A container with a sausage, egg, and tomato slices and another container with bread."
+        },
+        {
+          "image_id": 452084,
+          "id": 523892,
+          "caption": "a couple of bowls with some food in it and a fork"
+        },
+        {
+          "image_id": 452084,
+          "id": 532001,
+          "caption": "There are slices of tomatoes on top of an omelet with a sausage."
+        },
+        {
+          "image_id": 452084,
+          "id": 532637,
+          "caption": "A box contains a breakfast with an omelet, tomato slices, a sausage, and some toast."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3702/10209222973_bda6223a9f_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3702/10209222973_bda6223a9f_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000452084.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000452084.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000452084.jpg",
+          "height": 639,
+          "width": 640,
+          "date_captured": "2013-11-24 22:21:06",
+          "flickr_url": "http://farm4.staticflickr.com/3702/10209222973_bda6223a9f_z.jpg",
+          "id": 452084
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000452084.jpg",
+          "compressed_size": 240932,
+          "size": 240932,
+          "crc32": 2095755718,
+          "offset": 374440984,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000006954_ann603617",
+      "source_image_id": 6954,
+      "source_annotation_id": 603617,
+      "target_category": "frisbee",
+      "original_image_sha256": "59471a9bed5c28ac2f3ad56af1799340d6acb90f7c87d1f60360d1a9466e89ea",
+      "source_image": "train/raw/val2017/000000006954.jpg",
+      "official_captions": [
+        {
+          "image_id": 6954,
+          "id": 507154,
+          "caption": "A group of young children sitting in the grass."
+        },
+        {
+          "image_id": 6954,
+          "id": 551764,
+          "caption": "A group of children sitting on the grass with frisbees in their hands. "
+        },
+        {
+          "image_id": 6954,
+          "id": 552592,
+          "caption": "A group of children sitting in the grass with two of them holding a Frisbee ."
+        },
+        {
+          "image_id": 6954,
+          "id": 554656,
+          "caption": "Five small boys sitting on the grass holding two frisbees"
+        },
+        {
+          "image_id": 6954,
+          "id": 556432,
+          "caption": "a bunch of kids sitting on grass holding a frisbe"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4116/4876846589_a7bd6f3a47_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4116/4876846589_a7bd6f3a47_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000006954.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000006954.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000006954.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-18 15:17:01",
+          "flickr_url": "http://farm5.staticflickr.com/4116/4876846589_a7bd6f3a47_z.jpg",
+          "id": 6954
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000006954.jpg",
+          "compressed_size": 266595,
+          "size": 266595,
+          "crc32": 2222064637,
+          "offset": 381073242,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000165336_ann594861",
+      "source_image_id": 165336,
+      "source_annotation_id": 594861,
+      "target_category": "giraffe",
+      "original_image_sha256": "e23ac828a6b4eaa5c50ec93a33fba93e3a27a4b016ff4e56878d420968710cf3",
+      "source_image": "train/raw/val2017/000000165336.jpg",
+      "official_captions": [
+        {
+          "image_id": 165336,
+          "id": 218690,
+          "caption": "Two giraffe standing next to each other on a field."
+        },
+        {
+          "image_id": 165336,
+          "id": 236402,
+          "caption": "Two giraffes and one other animal grazing in a field."
+        },
+        {
+          "image_id": 165336,
+          "id": 236807,
+          "caption": "Two giraffes next to an antelope in a field."
+        },
+        {
+          "image_id": 165336,
+          "id": 240203,
+          "caption": "Two giraffes and a deer-like animal in a grassy field."
+        },
+        {
+          "image_id": 165336,
+          "id": 247811,
+          "caption": "Two giraffe and a zebra are standing in a field."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4143/4803254371_61a1b44aa9_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4143/4803254371_61a1b44aa9_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000165336.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000165336.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000165336.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-16 18:41:52",
+          "flickr_url": "http://farm5.staticflickr.com/4143/4803254371_61a1b44aa9_z.jpg",
+          "id": 165336
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000165336.jpg",
+          "compressed_size": 223848,
+          "size": 223848,
+          "crc32": 2784736210,
+          "offset": 64682731,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000329041_ann1178519",
+      "source_image_id": 329041,
+      "source_annotation_id": 1178519,
+      "target_category": "handbag",
+      "original_image_sha256": "e7b699bba23d6e61b6e921c247d483e37e9d42cd3f18b1555490ad1b8a666f62",
+      "source_image": "train/raw/val2017/000000329041.jpg",
+      "official_captions": [
+        {
+          "image_id": 329041,
+          "id": 31066,
+          "caption": "A group of brief cases are piled up on the sidewalks."
+        },
+        {
+          "image_id": 329041,
+          "id": 32089,
+          "caption": "Several pieces of luggage are on display. "
+        },
+        {
+          "image_id": 329041,
+          "id": 37105,
+          "caption": "four brown stacked suitcases and a woman with a red purse"
+        },
+        {
+          "image_id": 329041,
+          "id": 37960,
+          "caption": "a stack of suitcases out on the street"
+        },
+        {
+          "image_id": 329041,
+          "id": 39766,
+          "caption": "A stack of luggage with an opened one on top."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "id": 5,
+        "name": "Attribution-ShareAlike License"
+      },
+      "original_license_id": 5,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm4.staticflickr.com/3169/2887451891_ec68bd2df3_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm4.staticflickr.com/3169/2887451891_ec68bd2df3_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000329041.jpg",
+        "original_image_metadata": {
+          "license": 5,
+          "file_name": "000000329041.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000329041.jpg",
+          "height": 640,
+          "width": 480,
+          "date_captured": "2013-11-18 10:05:11",
+          "flickr_url": "http://farm4.staticflickr.com/3169/2887451891_ec68bd2df3_z.jpg",
+          "id": 329041
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000329041.jpg",
+          "compressed_size": 129629,
+          "size": 129629,
+          "crc32": 3161664393,
+          "offset": 196751631,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000024567_ann1069864",
+      "source_image_id": 24567,
+      "source_annotation_id": 1069864,
+      "target_category": "hot dog",
+      "original_image_sha256": "44891e1a27e3a262a3d879fa27d2749b31ca71d648f800952f4dccc248bc3743",
+      "source_image": "train/raw/val2017/000000024567.jpg",
+      "official_captions": [
+        {
+          "image_id": 24567,
+          "id": 726127,
+          "caption": "There is a man looking at a lot if hot dogs in a bun in a pan"
+        },
+        {
+          "image_id": 24567,
+          "id": 726715,
+          "caption": "a man that is holding a tray of hot dogs"
+        },
+        {
+          "image_id": 24567,
+          "id": 727141,
+          "caption": "A man holds a patter full of grilled hotdogs in buns. "
+        },
+        {
+          "image_id": 24567,
+          "id": 727681,
+          "caption": "A man holding a pan with hot dogs on buns. "
+        },
+        {
+          "image_id": 24567,
+          "id": 728938,
+          "caption": "Man on steps with tray of grilled hot dogs on buns. "
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm6.staticflickr.com/5231/5915713227_214eb69a8c_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm6.staticflickr.com/5231/5915713227_214eb69a8c_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000024567.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000024567.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000024567.jpg",
+          "height": 640,
+          "width": 480,
+          "date_captured": "2013-11-20 09:12:46",
+          "flickr_url": "http://farm6.staticflickr.com/5231/5915713227_214eb69a8c_z.jpg",
+          "id": 24567
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000024567.jpg",
+          "compressed_size": 243476,
+          "size": 243476,
+          "crc32": 3903577946,
+          "offset": 257452797,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000066635_ann1114763",
+      "source_image_id": 66635,
+      "source_annotation_id": 1114763,
+      "target_category": "keyboard",
+      "original_image_sha256": "0969fb5fb163065ac5f0a8ee922db3339a3e099086a40f6d4da4b3254fc1a422",
+      "source_image": "train/raw/val2017/000000066635.jpg",
+      "official_captions": [
+        {
+          "image_id": 66635,
+          "id": 426954,
+          "caption": "A desk area with a computer monitor, keyboard and mouse."
+        },
+        {
+          "image_id": 66635,
+          "id": 428073,
+          "caption": "A computer monitor with a keyboard and a mouse."
+        },
+        {
+          "image_id": 66635,
+          "id": 433242,
+          "caption": "a desk top with a monitor and keyboard on it"
+        },
+        {
+          "image_id": 66635,
+          "id": 433362,
+          "caption": "a small wood table with a small computer on it "
+        },
+        {
+          "image_id": 66635,
+          "id": 434259,
+          "caption": "An apple computer monitor, keyboard and mouse sits on top of a clean wooden desk. "
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm1.staticflickr.com/101/256415658_3e03393dd5_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm1.staticflickr.com/101/256415658_3e03393dd5_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000066635.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000066635.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000066635.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-22 00:58:44",
+          "flickr_url": "http://farm1.staticflickr.com/101/256415658_3e03393dd5_z.jpg",
+          "id": 66635
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000066635.jpg",
+          "compressed_size": 68818,
+          "size": 68818,
+          "crc32": 1889478832,
+          "offset": 221379571,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "train"
+    },
+    {
+      "source_id": "coco2017val_000000229747_ann159951",
+      "source_image_id": 229747,
+      "source_annotation_id": 159951,
+      "target_category": "airplane",
+      "original_image_sha256": "facc3c41a4844a20ef43c9c08036885b6e910b62f9d4f071cd666818d246a65f",
+      "source_image": "development/raw/val2017/000000229747.jpg",
+      "official_captions": [
+        {
+          "image_id": 229747,
+          "id": 611749,
+          "caption": "A photo of an outside with various things in the scene.\n"
+        },
+        {
+          "image_id": 229747,
+          "id": 612871,
+          "caption": "A airplane that is flying in the sky."
+        },
+        {
+          "image_id": 229747,
+          "id": 617446,
+          "caption": "a large plane is flying in the sky"
+        },
+        {
+          "image_id": 229747,
+          "id": 618277,
+          "caption": "An air plane flies in a dark grey sky"
+        },
+        {
+          "image_id": 229747,
+          "id": 618640,
+          "caption": "a large jet airplane flying in the sky"
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm6.staticflickr.com/5055/5466212029_aa5f345df7_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm6.staticflickr.com/5055/5466212029_aa5f345df7_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000229747.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000229747.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000229747.jpg",
+          "height": 541,
+          "width": 640,
+          "date_captured": "2013-11-16 04:15:34",
+          "flickr_url": "http://farm6.staticflickr.com/5055/5466212029_aa5f345df7_z.jpg",
+          "id": 229747
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000229747.jpg",
+          "compressed_size": 114434,
+          "size": 114434,
+          "crc32": 2935264607,
+          "offset": 282816311,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "development"
+    },
+    {
+      "source_id": "coco2017val_000000389381_ann2186547",
+      "source_image_id": 389381,
+      "source_annotation_id": 2186547,
+      "target_category": "apple",
+      "original_image_sha256": "87f7041b4292e3816f62cc662488aed5e2a33b7952a092a4c00988c4149f0412",
+      "source_image": "development/raw/val2017/000000389381.jpg",
+      "official_captions": [
+        {
+          "image_id": 389381,
+          "id": 646118,
+          "caption": "a bowl of different kinds of food on it"
+        },
+        {
+          "image_id": 389381,
+          "id": 646256,
+          "caption": "two dishes holding a bunch of vegetables and fruit"
+        },
+        {
+          "image_id": 389381,
+          "id": 646973,
+          "caption": "A colorful assortment of different fruits and vegetables. "
+        },
+        {
+          "image_id": 389381,
+          "id": 651488,
+          "caption": "A plastic bento box filled with rice, vegetables and fresh fruit"
+        },
+        {
+          "image_id": 389381,
+          "id": 652682,
+          "caption": "One tray of rice and a tray of fruits and veggies."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "id": 4,
+        "name": "Attribution License"
+      },
+      "original_license_id": 4,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm3.staticflickr.com/2544/4007091102_031486bd66_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm3.staticflickr.com/2544/4007091102_031486bd66_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000389381.jpg",
+        "original_image_metadata": {
+          "license": 4,
+          "file_name": "000000389381.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000389381.jpg",
+          "height": 543,
+          "width": 640,
+          "date_captured": "2013-11-19 20:29:00",
+          "flickr_url": "http://farm3.staticflickr.com/2544/4007091102_031486bd66_z.jpg",
+          "id": 389381
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000389381.jpg",
+          "compressed_size": 222335,
+          "size": 222335,
+          "crc32": 243690446,
+          "offset": 641464248,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "development"
+    },
+    {
+      "source_id": "coco2017val_000000554328_ann633522",
+      "source_image_id": 554328,
+      "source_annotation_id": 633522,
+      "target_category": "baseball glove",
+      "original_image_sha256": "bfbb8569fd975f54b02c35a472e42ce775485554e312a79cc30fc0898d678414",
+      "source_image": "development/raw/val2017/000000554328.jpg",
+      "official_captions": [
+        {
+          "image_id": 554328,
+          "id": 539502,
+          "caption": "A group of three men standing next to each other on a baseball field."
+        },
+        {
+          "image_id": 554328,
+          "id": 540054,
+          "caption": "A man wearing a white shirt and standing between two baseball players."
+        },
+        {
+          "image_id": 554328,
+          "id": 543033,
+          "caption": "a black and white picture of tow baseball players and a coach "
+        },
+        {
+          "image_id": 554328,
+          "id": 544596,
+          "caption": "A man talking to two people in baseball uniforms."
+        },
+        {
+          "image_id": 554328,
+          "id": 545406,
+          "caption": "Two old time baseball players talk to a man."
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "id": 1,
+        "name": "Attribution-NonCommercial-ShareAlike License"
+      },
+      "original_license_id": 1,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4149/5072971882_8bb1f01b18_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4149/5072971882_8bb1f01b18_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000554328.jpg",
+        "original_image_metadata": {
+          "license": 1,
+          "file_name": "000000554328.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000554328.jpg",
+          "height": 499,
+          "width": 640,
+          "date_captured": "2013-11-19 18:25:43",
+          "flickr_url": "http://farm5.staticflickr.com/4149/5072971882_8bb1f01b18_z.jpg",
+          "id": 554328
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000554328.jpg",
+          "compressed_size": 183023,
+          "size": 183023,
+          "crc32": 1397571302,
+          "offset": 625895818,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "development"
+    },
+    {
+      "source_id": "coco2017val_000000109916_ann710699",
+      "source_image_id": 109916,
+      "source_annotation_id": 710699,
+      "target_category": "bowl",
+      "original_image_sha256": "b8409b5137f8653727eed92c375318c1c947cc2bb0cf75cc972d2293aacd9323",
+      "source_image": "development/raw/val2017/000000109916.jpg",
+      "official_captions": [
+        {
+          "image_id": 109916,
+          "id": 130754,
+          "caption": "Twp cake pans sitting and cooling on the stove"
+        },
+        {
+          "image_id": 109916,
+          "id": 151703,
+          "caption": "A couple of dishes are sitting on a stove."
+        },
+        {
+          "image_id": 109916,
+          "id": 157730,
+          "caption": "an image of two cakes on the stove"
+        },
+        {
+          "image_id": 109916,
+          "id": 181790,
+          "caption": "a close up of two pots of food on a stove"
+        },
+        {
+          "image_id": 109916,
+          "id": 200912,
+          "caption": "Two cake pans with cake on top of a stove.  "
+        }
+      ],
+      "training_caption": "A photograph of a scene. One continuous camera shot.",
+      "original_license": {
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "id": 5,
+        "name": "Attribution-ShareAlike License"
+      },
+      "original_license_id": 5,
+      "provenance": {
+        "source": {
+          "source": "COCO2017 / Flickr",
+          "source_url": "http://farm5.staticflickr.com/4149/5094504532_a661575b73_z.jpg",
+          "license_url": "http://creativecommons.org/licenses/by-sa/2.0/",
+          "original_unchanged": true,
+          "creator_title": "Not supplied in COCO metadata; follow original Flickr URL before public redistribution"
+        },
+        "flickr_url": "http://farm5.staticflickr.com/4149/5094504532_a661575b73_z.jpg",
+        "coco_url": "http://images.cocodataset.org/val2017/000000109916.jpg",
+        "original_image_metadata": {
+          "license": 5,
+          "file_name": "000000109916.jpg",
+          "coco_url": "http://images.cocodataset.org/val2017/000000109916.jpg",
+          "height": 480,
+          "width": 640,
+          "date_captured": "2013-11-20 18:19:33",
+          "flickr_url": "http://farm5.staticflickr.com/4149/5094504532_a661575b73_z.jpg",
+          "id": 109916
+        },
+        "purpose": "Project source photograph for synthetic 2D motion supervision; not an observed video",
+        "zip_member": {
+          "name": "val2017/000000109916.jpg",
+          "compressed_size": 192178,
+          "size": 192178,
+          "crc32": 2668067698,
+          "offset": 52074326,
+          "compression": 0,
+          "flags": 0
+        }
+      },
+      "split": "development"
+    }
+  ]
+}

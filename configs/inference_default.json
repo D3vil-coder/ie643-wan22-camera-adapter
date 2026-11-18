@@ -1,0 +1,13 @@
+{
+  "checkpoint": "artifacts/flow_poc_all/adapter_000300.safetensors",
+  "mode": "zoom_in",
+  "magnitude": 1.0,
+  "seed": 42,
+  "steps": 50,
+  "guidance": 5.0,
+  "flow_shift": 5.0,
+  "camera_guidance": 1.0,
+  "camera_min_sigma": 0.6,
+  "camera_residual_anchor": "teacher",
+  "component": "full"
+}

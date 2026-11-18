@@ -1,0 +1,28 @@
+{
+  "environment": "Molab GPU runtime verifiedlive2026-10-26",
+  "torch_build": "2.11.0+cu130",
+  "cuda": "13.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "packages": {
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "diffusers": "0.36.0",
+    "transformers": "4.57.6",
+    "accelerate": "1.15.0",
+    "safetensors": "0.8.0",
+    "numpy": "2.4.6",
+    "Pillow": "12.3.0",
+    "huggingface-hub": "0.36.2",
+    "imageio": "2.38.0",
+    "imageio-ffmpeg": "0.6.0",
+    "opencv-python": "5.0.0.93",
+    "marimo": "0.25.2",
+    "anywidget": "0.11.0",
+    "matplotlib": "3.11.1",
+    "sentencepiece": "0.2.2",
+    "protobuf": "6.33.6",
+    "ftfy": "6.3.1",
+    "tokenizers": "0.22.2"
+  },
+  "local_cpu_evaluation": "Separate pinned environment in requirements-evaluation.txt; do not merge into GPU environment."
+}
