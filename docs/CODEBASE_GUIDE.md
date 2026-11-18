@@ -80,7 +80,7 @@ Cross-cutting: `fpcamera.runtime` (GPU lease, atomic json), `fpcamera.wan` (pinn
 | `notebooks/` | marimo notebooks: `camera_studio_v2.py` (final user-facing), `camera_interface_v2.py` (developer UI), `flow_camera_interface.py` (v1 UI). See 3.4. |
 | `configs/` | JSON configs: data, training, inference, strength calibration, v1 profiles; `provenance/` holds v1 runtime/profile records. See 3.5. |
 | `docs/` | `ANALYSIS_AND_PLAN.md` (living plan + status log), `v1/` (Submission 1 docs), `v2/` (design docs), `experiments/` (session runbooks and results), `submission/` (report, poster, figures, build scripts), this guide. See 6. |
-| `tests/` | 288 CPU-only pytest tests (no GPU, no model). See 7. |
+| `tests/` | 310 CPU-only pytest tests (no GPU, no model). See 7. |
 | `gallery/` | Offline HTML gallery template (`index.html`, `gallery_data.json`); generated media/sheets are git-ignored. |
 | `data/` | Two small COCO source manifests are tracked: `data/flow_poc/pilot_sources.json` (v1) and `data/v2/sources_v2.json` (v2: 636 COCO 2017 sources with image ids, Flickr/COCO URLs, licences, captions and sha256 of the original files; the images themselves are not redistributed, `select_coco_sources_v2.py` re-downloads them). The v2 images and caches (`sources/`, `_work/`, `cache_*/`) are generated on the GPU host by `select_coco_sources_v2.py` / `build_cache_v2.py` and are git-ignored. |
 | top level | `README.md`, `ASSETS.md` (large assets kept out of git and where they live), `requirements*.txt` (base / UI / evaluation, pinned), `LICENSE` (Apache-2.0) and `NOTICE` (third-party licences). |
@@ -376,7 +376,7 @@ the trainer checkpoints atomically, and `hf_backup` mirrors everything off the s
 
 ## 7. Tests
 
-`python -m pytest -q` runs 288 CPU-only tests (about 2 minutes). Nothing needs a GPU or the Wan weights; the model is replaced by a tiny mock transformer (plus the real `FlowControlLoRA`) where needed.
+`python -m pytest -q` runs 310 CPU-only tests (about 2 minutes). Nothing needs a GPU or the Wan weights; the model is replaced by a tiny mock transformer (plus the real `FlowControlLoRA`) where needed.
 
 | Test file | Covers |
 |---|---|

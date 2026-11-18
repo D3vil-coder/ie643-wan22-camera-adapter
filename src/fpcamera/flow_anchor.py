@@ -13,6 +13,109 @@ import math
 import torch
 
 
+def parse_residual_lowfreq(spec):
+    """Normalise a residual low-frequency filter spec.
+
+    ``None`` / ``""`` / ``"none"`` -> ``None`` (default, the residual is used unchanged);
+    ``"mean"`` -> ``("mean", None)``: remove the per-plane, per-channel spatial mean of the residual (F1);
+    ``"blur:K"`` -> ``("blur", K)``: remove a Gaussian low-pass of standard deviation ``K`` latent cells (F2).
+    Tuples are returned unchanged (after validation).
+    """
+    if spec is None:
+        return None
+    if isinstance(spec, (tuple, list)):
+        kind, arg = spec
+    else:
+        text = str(spec).strip().lower()
+        if text in ("", "none", "off"):
+            return None
+        kind, _, arg = text.partition(":")
+        arg = arg or None
+    if kind == "mean":
+        if arg is not None:
+            raise ValueError("residual low-frequency filter 'mean' takes no argument")
+        return ("mean", None)
+    if kind == "blur":
+        try:
+            sigma = float(arg)
+        except (TypeError, ValueError):
+            raise ValueError("residual low-frequency filter must be 'mean' or 'blur:K' with K > 0") from None
+        if not math.isfinite(sigma) or sigma <= 0:
+            raise ValueError("residual low-frequency blur sigma must be finite and > 0")
+        return ("blur", sigma)
+    raise ValueError(f"Unknown residual low-frequency filter {spec!r} (use 'none', 'mean' or 'blur:K')")
+
+
+def _gaussian_matrix(n, sigma, like):
+    """Row-normalised Gaussian smoothing matrix ``[n, n]``; row i = weights of cell i (zero padding, renormalised)."""
+    idx = torch.arange(n, device=like.device, dtype=torch.float32)
+    w = torch.exp(-((idx[:, None] - idx[None, :]) ** 2) / (2.0 * float(sigma) ** 2))
+    return w / w.sum(dim=1, keepdim=True)
+
+
+MIN_WEIGHT_FRACTION = 0.05  # a plane with less valid weight than this (fraction of cells) falls back to the unweighted filter
+
+
+def lowfreq_highpass(residual, spec, weight=None):
+    """Remove the low spatial frequencies of ``residual`` (``[..., H, W]``, per plane and channel).
+
+    ``spec`` as in ``parse_residual_lowfreq``. ``("mean", None)`` subtracts the spatial mean over the last two
+    dims; ``("blur", K)`` subtracts a Gaussian low-pass (sigma K cells, border-renormalised so a constant maps to
+    itself). ``None`` returns the input. The result has zero spatial mean for ``mean`` and keeps all structure
+    finer than about K cells for ``blur``. Works for any tensor with >= 2 dims.
+
+    ``weight`` (optional, broadcastable to ``residual``, values in [0, 1], e.g. the guide's validity channel): the
+    low-frequency part is *estimated* from the weighted cells only (weighted mean / normalised convolution), so
+    content that is genuinely new (revealed region, weight 0) does not pollute the estimate, and it is subtracted
+    everywhere. Planes or cells with almost no weight fall back to the unweighted estimate.
+    """
+    spec = parse_residual_lowfreq(spec)
+    if spec is None:
+        return residual
+    kind, arg = spec
+    if weight is not None:
+        w = weight.to(device=residual.device, dtype=residual.dtype).expand(*residual.shape[:-2], *weight.shape[-2:])
+        total = w.sum(dim=(-2, -1), keepdim=True)
+        enough = total >= MIN_WEIGHT_FRACTION * residual.shape[-2] * residual.shape[-1]
+        if kind == "mean":
+            weighted = (w * residual).sum(dim=(-2, -1), keepdim=True) / total.clamp_min(1e-6)
+            low = torch.where(enough, weighted, residual.mean(dim=(-2, -1), keepdim=True))
+            return residual - low
+        height, width = residual.shape[-2], residual.shape[-1]
+        gh = _gaussian_matrix(height, arg, residual).to(residual.dtype)
+        gw = _gaussian_matrix(width, arg, residual).to(residual.dtype)
+
+        def smooth(x):
+            return torch.matmul(torch.matmul(gh, x), gw.transpose(0, 1))
+
+        den = smooth(w)
+        weighted = smooth(w * residual) / den.clamp_min(1e-6)
+        plain = smooth(residual)
+        low = torch.where(enough & (den > 0.02), weighted, plain)
+        return residual - low
+    if kind == "mean":
+        return residual - residual.mean(dim=(-2, -1), keepdim=True)
+    height, width = residual.shape[-2], residual.shape[-1]
+    gh, gw = _gaussian_matrix(height, arg, residual), _gaussian_matrix(width, arg, residual)
+    low = torch.matmul(torch.matmul(gh.to(residual.dtype), residual), gw.to(residual.dtype).transpose(0, 1))
+    return residual - low
+
+
+def residual_stats(residual, sigma):
+    """Diagnostic statistics of a camera residual ``[1, C, T, H, W]`` (frames 1.. only; frame 0 is the clean image plane)."""
+    r = residual[..., 1:, :, :] if residual.ndim >= 5 and residual.shape[-3] > 1 else residual
+    mean_sp = r.mean(dim=(-2, -1), keepdim=True)
+    low8 = r - lowfreq_highpass(r, ("blur", 8.0))
+    chan_mean = r.mean(dim=tuple(d for d in range(r.ndim) if d != r.ndim - 4)) if r.ndim >= 4 else r.mean().reshape(1)
+    return {
+        "sigma": float(sigma),
+        "rms": float(r.pow(2).mean().sqrt()),
+        "rms_spatial_mean": float(mean_sp.pow(2).mean().sqrt()),
+        "rms_lowpass8": float(low8.pow(2).mean().sqrt()),
+        "channel_mean": [round(float(v), 5) for v in chan_mean.flatten()],
+    }
+
+
 def _sigma(timestep):
     value = timestep.amax().item() if hasattr(timestep, "amax") else float(timestep)
     value = float(value) / 1000.0
@@ -33,6 +136,9 @@ def frozen_camera_difference(
     active_min_sigma=0.6,
     reference="static",
     batch_forwards=True,
+    residual_lowfreq=None,
+    trace_residual=False,
+    lowfreq_weight=None,
 ):
     """Native text CFG(F0) + camera_gain * (Fphi(text,cam)-Fphi(text,static)).
 
@@ -51,6 +157,20 @@ def frozen_camera_difference(
     negative call then returns its cached half after verifying that its latents/timestep/text are exactly
     the ones that were batched, else it recomputes normally.  The adapted passes stay batch-1.  Same math;
     results differ from sequential calls only at kernel-nondeterminism level.
+
+    residual_lowfreq (opt-in, default None = unchanged behaviour): high-pass filter of the camera residual
+    (adapter-on minus reference) before it is added, in latent space, per plane and channel:
+    ``"mean"`` removes the spatial mean (the adapter then cannot shift a frame's global colour/brightness),
+    ``"blur:K"`` removes a Gaussian low-pass of K latent cells. See ``lowfreq_highpass``.
+
+    lowfreq_weight (opt-in, needs residual_lowfreq): weights in [0, 1] broadcastable to the residual (the guide's
+    validity channel ``condition[:, 48:49]``, ``[1, 1, T, h, w]``): the low-frequency part is estimated from valid cells
+    only and removed everywhere (see ``lowfreq_highpass``).
+
+    trace_residual (diagnostic, default False = no extra work): append per active step to
+    ``state["residual_trace"]`` the noise level and statistics of the raw residual (before any filter) over the
+    latent frames 1.. : its rms, the rms of its per-frame/per-channel spatial mean (the part ``mean`` would remove),
+    the rms of its Gaussian low-pass of 8 cells, and the per-channel mean over time and space (48 numbers).
     """
     camera_gain = float(camera_gain)
     text_guidance = float(text_guidance)
@@ -63,8 +183,11 @@ def frozen_camera_difference(
         raise ValueError("Text guidance must be >=1")
     if not math.isfinite(active_min_sigma) or not 0 <= active_min_sigma <= 1:
         raise ValueError("Invalid noise window")
+    lowfreq = parse_residual_lowfreq(residual_lowfreq)
     cfg = text_guidance > 1
     state = {
+        "residual_lowfreq": None if lowfreq is None else list(lowfreq),
+        "residual_lowfreq_weighted": lowfreq_weight is not None and lowfreq is not None,
         "native_calls": 0,
         "original_forward_calls": 0,
         "batched_forward_calls": 0,
@@ -199,6 +322,10 @@ def frozen_camera_difference(
             # residual by g here makes the net camera contribution exactly camera_gain * (F_requested - F_reference), independent of g.
             factor = camera_gain / text_guidance if cfg else camera_gain
             residual = controlled[0].float() - null[0].float()
+            if trace_residual:
+                state["residual_trace"].append(residual_stats(residual, sigma))
+            if lowfreq is not None:
+                residual = lowfreq_highpass(residual, lowfreq, lowfreq_weight)
             combined = (baseline[0].float() + factor * residual).to(
                 dtype=baseline[0].dtype
             )
@@ -207,6 +334,8 @@ def frozen_camera_difference(
         finally:
             adapter.set_condition(requested)
 
+    if trace_residual:
+        state["residual_trace"] = []
     transformer.forward = anchored
     try:
         yield state

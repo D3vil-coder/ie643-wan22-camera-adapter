@@ -1,5 +1,7 @@
 # Trajectory-Controlled Camera Motion Adapter for Wan2.2 I2V (IE 643, v2)
 
+> **Branch `exp/flat-image-fix` (experimental, not part of `master`).** Adds opt-in inference options `--residual-lowfreq` / `--residual-lowfreq-mask` and frame-analysis tools for the global brightness / colour drift that the v2 adapter shows on flat, low-texture images. Defaults are unchanged. Diagnosis, results and the open problems are in [`docs/experiments/F1_FLAT_IMAGE_FIX.md`](docs/experiments/F1_FLAT_IMAGE_FIX.md).
+
 Turn **one photograph** into a 5-second, 1280 x 704, 24 fps video with a **virtual camera move** (pan, tilt, zoom in / out) and one
 strength slider. A lightweight 14.26M-parameter adapter (guide projection + rank-16 LoRA) steers the **frozen**
 `Wan-AI/Wan2.2-TI2V-5B-Diffusers` image-to-video model; the base weights are never modified.
@@ -44,7 +46,7 @@ python -m fpcamera.flow_infer --project-root . \
 `--motion` is one of `pan_left pan_right tilt_up tilt_down zoom_in zoom_out`; `--strength` is in [0, 1]. The output folder holds `video.mp4`
 and `run.json` (all settings and hashes). Python API, batch generation and the other options: [`docs/v2/INFERENCE_V2.md`](docs/v2/INFERENCE_V2.md).
 
-Tests (CPU only, no model needed): `python -m pytest -q` (288 tests).
+Tests (CPU only, no model needed): `python -m pytest -q` (310 tests).
 
 ## Where to read next
 

@@ -51,7 +51,7 @@ from .flow_control import (
     build_image_condition,
 )
 from .flow_guidance import camera_prediction_guidance
-from .flow_anchor import frozen_camera_difference
+from .flow_anchor import frozen_camera_difference, parse_residual_lowfreq
 from .speed_options import resolve_attn_backend, set_block_compile, transformer_attention
 from .runtime import gpu_lease, file_sha256, write_json
 from .strength import (
@@ -424,8 +424,23 @@ def generate(
     attn_backend="auto",
     compile_blocks=False,
     progress_callback=None,
+    residual_lowfreq=None,
+    trace_residual=False,
+    residual_lowfreq_mask=None,
 ):
     """Generate one video. New optional arguments (defaults reproduce v1 exactly):
+
+    residual_lowfreq_mask  None (default) | ``"valid"``: with ``residual_lowfreq``, estimate the low-frequency part of the
+                      residual from the cells of the guide that still show the first image (validity channel) and
+                      subtract it everywhere, so the revealed region cannot bias the estimate. Recorded in run.json.
+    trace_residual    diagnostic (default False): record per-step statistics of the adapter residual in run.json
+                      ``camera_guidance_execution.residual_trace`` (see ``flow_anchor.residual_stats``).
+    residual_lowfreq  None (default: the camera residual is used unchanged) | ``"mean"`` | ``"blur:K"``: high-pass
+                      the adapter's residual (adapter-on minus teacher) in latent space at every adapter-active
+                      step, per latent frame and channel (see ``flow_anchor.lowfreq_highpass``). ``"mean"``
+                      removes its spatial mean (the adapter cannot shift a frame's global colour/brightness),
+                      ``"blur:K"`` removes a Gaussian low-pass of K latent cells (1 latent cell = 16 px).
+                      Needs the teacher or frozen residual anchor. Recorded in run.json.
 
     progress_callback optional ``f(step, total)`` called in the calling thread after every denoising step
                       (``step`` = completed steps, 1..``total``; ``total`` = ``steps``). Default None = no
@@ -487,6 +502,13 @@ def generate(
         )
     if component not in ("full", "guide_only", "attention_only", "lora_only"):
         raise ValueError("Unknown camera-adapter component ablation")
+    residual_lowfreq = parse_residual_lowfreq(residual_lowfreq)
+    if residual_lowfreq_mask not in (None, "valid"):
+        raise ValueError("residual_lowfreq_mask must be None or 'valid'")
+    if residual_lowfreq_mask is not None and residual_lowfreq is None:
+        raise ValueError("residual_lowfreq_mask needs residual_lowfreq")
+    if residual_lowfreq is not None and frozen_baseline:
+        raise ValueError("A residual low-frequency filter needs the adapter (not --frozen-baseline)")
     if guide_fill_mode is not None and guide_fill_mode not in FILL_MODES:
         raise ValueError(f"guide_fill_mode must be one of {FILL_MODES}")
     physical = amplitude_deg is not None or zoom_ratio is not None
@@ -551,6 +573,8 @@ def generate(
         raise ValueError("Unknown camera residual anchor")
     if frozen_baseline and camera_residual_anchor != "none":
         raise ValueError("Frozen baseline has no learned residual anchor")
+    if residual_lowfreq is not None and camera_residual_anchor not in ("frozen", "teacher"):
+        raise ValueError("A residual low-frequency filter needs --camera-residual-anchor teacher or frozen")
     if camera_min_sigma is None:
         # camera_min_sigma: below this noise level the adapter is switched off and only the frozen model runs.  v2
         # default = the lower bound of the pass-A noise window (0.6), i.e. the adapter is only used at noise levels it
@@ -790,6 +814,9 @@ def generate(
                     if camera_residual_anchor == "teacher"
                     else "static",
                     batch_forwards=batch_forwards,
+                    residual_lowfreq=residual_lowfreq,
+                    trace_residual=trace_residual,
+                    lowfreq_weight=condition[:, 48:49] if residual_lowfreq_mask == "valid" else None,
                 )
                 if camera_residual_anchor in ("frozen", "teacher")
                 else camera_prediction_guidance(
@@ -887,6 +914,8 @@ def generate(
             "camera_residual_anchor": camera_residual_anchor,
             "camera_guidance_execution": guidance_stats,
             "camera_min_sigma": float(camera_min_sigma),
+            "residual_lowfreq": None if residual_lowfreq is None else list(residual_lowfreq),
+            "residual_lowfreq_mask": residual_lowfreq_mask,
             "camera_sigma_schedule": camera_schedule,
             "camera_active_denoising_steps": sum(
                 r["adapter_active"] for r in camera_schedule
@@ -992,6 +1021,21 @@ def build_parser():
         "long or repeated runs; not bit-identical)",
     )
     parser.add_argument(
+        "--residual-lowfreq",
+        default=None,
+        metavar="mean|blur:K",
+        help="opt-in (default off): high-pass the adapter residual in latent space per frame and channel: 'mean' removes "
+        "its spatial mean (no global colour/brightness shift by the adapter), 'blur:K' removes a Gaussian low-pass of "
+        "K latent cells (16 px each). Needs the teacher/frozen residual anchor",
+    )
+    parser.add_argument(
+        "--residual-lowfreq-mask",
+        choices=("valid",),
+        default=None,
+        help="with --residual-lowfreq: estimate the low-frequency part from the cells that still show the first image "
+        "(guide validity channel) and subtract it everywhere (default: estimate over the whole frame)",
+    )
+    parser.add_argument(
         "--camera-residual-anchor",
         choices=("auto", "none", "frozen", "teacher"),
         default="auto",
@@ -1083,6 +1127,8 @@ def main(argv=None):
         batch_forwards=args.batch_forwards,
         attn_backend=args.attn_backend,
         compile_blocks=args.compile_blocks,
+        residual_lowfreq=args.residual_lowfreq,
+        residual_lowfreq_mask=args.residual_lowfreq_mask,
     )
     print(
         json.dumps(
