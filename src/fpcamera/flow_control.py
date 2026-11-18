@@ -1,7 +1,20 @@
-"""One flow/transported-appearance Control-LoRA for the frozen Wan TI2V path.
+"""The v2 adapter: a guide projection plus rank-16 LoRA on the frozen Wan TI2V-5B transformer.
 
-The condition is computed only from one image latent and supplied homographies.
-No target-video tensor is accepted by the conditioning API.
+Pipeline position: this is the model component trained by ``flow_train_v2`` and loaded by
+``flow_infer``.  ``build_image_condition`` turns *one* first-image latent and the requested
+camera homographies into a 51-channel "guide" (48 warped image-feature channels + 1 validity
+channel (validity = 1 - R) + 2 displacement channels).  ``FlowControlLoRA`` attaches to a transformer
+and (a) adds ``guide_projection(guide)`` to the patch-embedding output (token features) and
+(b) wraps 16 blocks' attn1 q/k/v and FFN linears with zero-start LoRA deltas
+(``control_lora.ControlLoRALinear``).  Everything is zero-initialised, so attaching the adapter
+is an exact identity on the frozen model (checked by the trainer at every launch).
+
+The condition is computed only from one image latent and supplied homographies; no target-video
+tensor is accepted by the conditioning API, so inference cannot leak future frames.
+
+Main entry points: ``build_image_condition``, ``FlowControlConfig``, ``FlowControlLoRA``
+(``set_condition``, ``disabled``, ``adapter_state_dict`` / ``load_adapter_state_dict``, ``close``).
+No CLI; exercised by ``tests/test_condition_fill.py`` and the trainer / inference tests.
 """
 
 from __future__ import annotations
@@ -18,6 +31,11 @@ from .control_lora import ControlLoRALinear
 
 @dataclass(frozen=True)
 class FlowControlConfig:
+    """Adapter architecture: transformer width, LoRA rank/alpha (alpha == rank gives scale 1), number of
+    leading blocks adapted (16 of 30), and the pinned Wan VAE strides (temporal 4, spatial 16) that the guide
+    must match.
+    """
+
     hidden: int = 3072
     rank: int = 16
     alpha: float = 16.0
@@ -27,12 +45,26 @@ class FlowControlConfig:
     vae_spatial_stride: int = 16
 
 
-def build_image_condition(image_latent, homographies, *, width, height, frames):
+FILL_MODES = ("zeros", "replicate")
+
+
+def build_image_condition(
+    image_latent, homographies, *, width, height, frames, fill_mode="zeros"
+):
     """48 guide +1 validity +2 forward-displacement-at-destination channels.
 
     Feature sampling uses normalized endpoint coordinates / align_corners=True.
     This is a motion prior; a warped latent is not assumed equal to VAE(target).
+
+    ``fill_mode`` controls the 48 guide channels where the validity channel is 0
+    (revealed regions that fall outside the first image):
+      - "zeros" (v1, default): zero padding and guide * valid, i.e. latent 0.
+      - "replicate": ``padding_mode="border"`` -- invalid positions carry the
+        nearest edge feature; the guide is NOT multiplied by valid. The validity
+        and displacement channels are identical in both modes.
     """
+    if fill_mode not in FILL_MODES:
+        raise ValueError(f"fill_mode must be one of {FILL_MODES}, got {fill_mode!r}")
     if image_latent.ndim != 5 or image_latent.shape[1:3] != (48, 1):
         raise ValueError("Expected first-image latent [B,48,1,H/16,W/16]")
     if (frames - 1) % 4 or width % 32 or height % 32:
@@ -50,6 +82,8 @@ def build_image_condition(image_latent, homographies, *, width, height, frames):
         matrices[:, 0], torch.eye(3, device=device)[None].expand(b, -1, -1), atol=1e-5
     ):
         raise ValueError("The first camera mapping must be identity")
+    # Wan's VAE compresses time by 4: latent frame t corresponds to RGB frame 4t, so keep every 4th homography
+    # (frame 0 is the first-image plane).
     matrices = matrices[:, ::4]
     t = matrices.shape[1]
     yy, xx = torch.meshgrid(
@@ -58,11 +92,15 @@ def build_image_condition(image_latent, homographies, *, width, height, frames):
         indexing="ij",
     )
     q = torch.stack((xx, yy, torch.ones_like(xx)), dim=-1)
+    # inverse warp: for each destination latent cell q, find where it came from in the FIRST view by applying
+    # H_t^-1 (H maps first view -> frame t).  p are those source coordinates (pixels of the first image).
     mapped = torch.einsum("btij,hwj->bthwi", torch.linalg.inv(matrices), q)
     positive = mapped[..., 2] > 1e-6
     p = mapped[..., :2] / mapped[..., 2:].clamp_min(1e-6)
     denominator = torch.tensor([width - 1, height - 1], device=device)
     pn = p / denominator
+    # validity = 1 - R: the source point lies inside the first image (and in front of the camera).  Cells where it is
+    # 0 are *revealed* regions -- content that does not exist in the conditioning image and must be generated.
     valid = positive & (pn >= 0).all(dim=-1) & (pn <= 1).all(dim=-1)
     grid = (2 * pn - 1).reshape(b * t, lh, lw, 2)
     reference = image_latent[:, :, 0].float()[:, None].expand(-1, t, -1, -1, -1)
@@ -70,11 +108,17 @@ def build_image_condition(image_latent, homographies, *, width, height, frames):
         reference.reshape(b * t, c, lh, lw),
         grid,
         mode="bilinear",
-        padding_mode="zeros",
+        # replicate fill: outside the first image 'border' padding copies the nearest edge feature instead of latent 0
+        # (which decodes to mid-gray and let v1 'output the guide' for holes).  The validity channel still marks these
+        # cells, so the network knows the feature is extrapolated.
+        padding_mode="zeros" if fill_mode == "zeros" else "border",
         align_corners=True,
     )
     guide = guide.reshape(b, t, c, lh, lw).permute(0, 2, 1, 3, 4)
-    guide = guide * valid[:, None]
+    if fill_mode == "zeros":
+        guide = guide * valid[:, None]
+    # 2 extra channels: forward displacement at the destination (destination minus source, normalised by the
+    # image size) -- a direct motion cue the guide features alone do not provide.
     displacement = ((q[..., :2][None, None] - p) / denominator).permute(0, 4, 1, 2, 3)
     # Identity has a closed-form exact answer. Avoid resampling roundoff in the
     # first-frame guide and in genuine static-camera training examples.
@@ -98,6 +142,15 @@ def build_image_condition(image_latent, homographies, *, width, height, frames):
 
 
 class FlowControlLoRA(nn.Module):
+    """Camera adapter attached to a frozen Wan transformer.
+
+    Trainable state: ``guide_projection`` (Conv3d 51 -> 3072, kernel/stride (1,2,2), same token grid as Wan's
+    patch embedding) and the LoRA A/B matrices on attn1 q/k/v + both FFN linears of the first ``layers`` blocks.
+    The guide is injected by a forward hook on ``patch_embedding``; the first latent plane (the clean conditioning
+    image) is never modified.  The frozen parameters stay registered and untouched
+    (``_original_parameter_refs``).  Always call ``close()`` to restore the transformer.
+    """
+
     def __init__(self, transformer, config: FlowControlConfig | None = None):
         super().__init__()
         self.config = config or FlowControlConfig()
@@ -130,6 +183,7 @@ class FlowControlLoRA(nn.Module):
         self.guide_projection = nn.Conv3d(
             51, self.config.hidden, (1, 2, 2), stride=(1, 2, 2)
         ).to(device=patch.weight.device, dtype=torch.float32)
+        # zero init => attaching the adapter is an exact identity on the frozen model (LoRA-B is zero-init as well).
         nn.init.zeros_(self.guide_projection.weight)
         nn.init.zeros_(self.guide_projection.bias)
         self.lora_weights = nn.ParameterDict()
@@ -163,6 +217,10 @@ class FlowControlLoRA(nn.Module):
         object.__setattr__(transformer, "_flow_control_lora", self)
 
     def set_condition(self, condition):
+        """Set the 51-channel guide ``[B,51,T,H,W]`` used by subsequent forwards (validated finite).  Must be called
+        before every forward unless the adapter is disabled; the trainer and the anchored sampler call it to switch
+        between the requested and the static guide.
+        """
         if condition is not None and (
             condition.ndim != 5
             or condition.shape[1] != 51
@@ -187,6 +245,8 @@ class FlowControlLoRA(nn.Module):
             raise ValueError(
                 f"Condition/backbone token grids disagree: {tuple(features.shape)} versus {tuple(output.shape)}"
             )
+        # zero the first latent plane's guide features: the conditioning image plane must stay untouched (identity
+        # anchor), the guide only acts on the 30 future planes.
         features = torch.cat(
             (torch.zeros_like(features[:, :, :1]), features[:, :, 1:]), dim=2
         )
@@ -194,6 +254,9 @@ class FlowControlLoRA(nn.Module):
 
     @contextmanager
     def disabled(self):
+        """Context manager that turns the whole adapter off (guide hook + every LoRA wrapper), restoring the
+        previous states on exit.  Inside it the model is exactly the frozen Wan, i.e. the *teacher*.
+        """
         before = self.enabled
         states = [w.enabled for w in self._wrappers.values()]
         self.enabled = False
@@ -207,6 +270,7 @@ class FlowControlLoRA(nn.Module):
                 wrapper.enabled = state
 
     def architecture(self):
+        """Serialisable architecture record (config, condition layout, LoRA target paths) stored in checkpoints."""
         return {
             "kind": "wan_flow_control_lora",
             "config": asdict(self.config),
@@ -215,6 +279,9 @@ class FlowControlLoRA(nn.Module):
         }
 
     def adapter_state_dict(self):
+        """Detached copy of all adapter tensors, keyed ``guide_projection.{weight,bias}`` and
+        ``<path>.lora_{A,B}`` (the layout of the published safetensors, 14.26M parameters).
+        """
         state = {
             "guide_projection.weight": self.guide_projection.weight.detach().clone(),
             "guide_projection.bias": self.guide_projection.bias.detach().clone(),
@@ -225,6 +292,7 @@ class FlowControlLoRA(nn.Module):
         return state
 
     def load_adapter_state_dict(self, state):
+        """Load a state dict with strict key set, shape and finiteness checks (raises ``ValueError``)."""
         expected = self.adapter_state_dict()
         if set(state) != set(expected):
             raise ValueError("Flow adapter state keys do not match the architecture")
@@ -243,6 +311,7 @@ class FlowControlLoRA(nn.Module):
                 dst.copy_(value.to(dst))
 
     def close(self):
+        """Remove the hook and put the original Linear modules back, leaving the transformer as it was."""
         self._hook.remove()
         for path, wrapper in self._wrappers.items():
             parent = self.transformer

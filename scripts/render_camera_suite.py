@@ -1,4 +1,10 @@
-"""Render verified camera runs as input plus frames 40, 80, and 120."""
+"""Submission 1 (v1) helper: render verified camera runs as input plus frames 40, 80 and 120 (one PNG).
+
+Reads fixed-name case folders (``CASES``) below ``--suite-root``, checks they share one checkpoint/profile and draws
+one row per case.  Never overwrites an existing output.
+
+    python scripts/render_camera_suite.py --suite-root artifacts/suite/step300 --output suite.png
+"""
 
 from __future__ import annotations
 
@@ -64,6 +70,7 @@ def _font(size: int) -> ImageFont.ImageFont:
 
 
 def _load_case(folder: Path, name: str) -> dict:
+    """Load and verify one case folder (run.json, video, input) for the suite figure."""
     for required in ("run.json", "input.png", "video.mp4"):
         if not (folder / required).is_file():
             raise FileNotFoundError(f"Case {name} is incomplete: {folder / required}")
@@ -135,6 +142,7 @@ def _common_profile(cases: list[dict]) -> dict:
 
 
 def _render(cases: list[dict], output: Path, profile: dict) -> None:
+    """Draw the suite figure (input + frames 40/80/120 per case)."""
     output = output.expanduser().resolve()
     if output.exists():
         raise FileExistsError(f"Refusing to overwrite contact sheet: {output}")
@@ -191,6 +199,7 @@ def _render(cases: list[dict], output: Path, profile: dict) -> None:
 
 
 def main() -> int:
+    """CLI entry; renders the PNG (never overwrites)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--suite-root",

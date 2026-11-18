@@ -1,0 +1,15 @@
+{
+  "_comment": "Defaults for `python -m fpcamera.flow_infer --config configs/inference_v2.json ...` and for notebooks/camera_interface_v2.py. Keys are the CLI option names with underscores; explicit flags win. Point `calibration` at configs/strength_calibration_v2.json once scripts/calibrate_strength.py has produced it. checkpoint/image/output/project_root must still be given on the CLI.",
+  "motion": "zoom_out",
+  "strength": 1.0,
+  "calibration": "configs/strength_calibration_v2.identity.json",
+  "seed": 42,
+  "steps": 50,
+  "guidance": 5.0,
+  "camera_guidance": 1.0,
+  "camera_min_sigma": null,
+  "camera_residual_anchor": "auto",
+  "guide_fill_mode": null,
+  "component": "full",
+  "prompt": null
+}

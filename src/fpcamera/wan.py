@@ -21,6 +21,7 @@ TEXT_WIDTH = 4096
 
 
 def versions() -> dict:
+    """Installed versions of the pinned runtime libraries (None if a package is missing)."""
     result = {}
     for name in (
         "torch",
@@ -42,6 +43,9 @@ def versions() -> dict:
 
 
 def require_pinned_runtime() -> dict:
+    """Raise unless diffusers 0.36.0, transformers 4.57.6 and torch 2.11.x are installed (the exact versions the
+    adapter was trained and verified with); returns the version dict.
+    """
     current = versions()
     errors = []
     for name, required in (("diffusers", "0.36.0"), ("transformers", "4.57.6")):
@@ -94,7 +98,9 @@ def _route_logs(destination: str | Path) -> Path:
 def configure_library_output(
     log_path: str | Path = "artifacts/runtime/library.log",
 ) -> Path:
+    """Silence progress bars and route library logs to a file *before* heavy imports (notebook safe); returns the log path."""
     # Set environment flags before any heavy module import or model load.
+    # environment flags must be set before any heavy library import so notebooks do not get flooded by progress bars.
     os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
     os.environ["TQDM_DISABLE"] = "1"
     destination = _route_logs(log_path)
@@ -113,6 +119,7 @@ def configure_library_output(
 
 
 def freeze_module(module):
+    """Put a module in eval mode and disable all gradients."""
     module.eval()
     module.requires_grad_(False)
     return module
@@ -269,7 +276,13 @@ def hash_module(
     include_buffers: bool = False,
     chunk_bytes: int = 64 << 20,
 ) -> str:
+    """sha256 over a module's parameters (chunked, no whole-model staging); used to prove the frozen backbone
+    never changed during training or inference.
+    """
     def values():
+        """Yield the (ordered) parameters to hash, optionally only frozen ones and/or buffers.  Hashing by index, not name, is
+        deliberate: adapter wrappers rename modules but keep the same ordered original Parameter objects.
+        """
         # Index identity is deliberate: adapter wrappers may change module names
         # while retaining the exact same ordered original Parameter objects.
         original = module.parameters() if parameters is None else parameters
@@ -290,6 +303,9 @@ def _device(module):
 
 
 def _encode_rgb(pipe, rgb: np.ndarray):
+    """Encode 1 or 97 uint8 RGB frames with the frozen native VAE (FP32 posterior mode, normalised in FP32 then cast
+    to bf16; see ``flow_cache.encode_rgb`` for the v2 cache path).  Returns ``[48,T,h,w]`` on the CPU.
+    """
     import torch
 
     value = np.asarray(rgb)
@@ -329,6 +345,7 @@ def _encode_rgb(pipe, rgb: np.ndarray):
 
 
 def encode_video(pipe, rgb_frames):
+    """Encode a 97-frame uint8 RGB clip (the legacy training contract) to normalised latents ``[48,25,h,w]``."""
     if np.asarray(rgb_frames).shape[0] != 97:
         raise ValueError("Training video must contain exactly 97 selected RGB frames")
     return _encode_rgb(pipe, rgb_frames)

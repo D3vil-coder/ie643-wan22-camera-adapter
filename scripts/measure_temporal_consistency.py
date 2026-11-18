@@ -1,4 +1,11 @@
-"""Measure adjacent frame consistency after compensating for global 2D motion."""
+"""Measure adjacent-frame consistency after compensating for global 2D motion (CPU diagnostic).
+
+Uses the sparse-flow tracks of ``measure_flow_video.py`` to align consecutive frames and reports the residual RGB
+difference; ``--aggregate-files`` merges several per-video reports.  A diagnostic, not a quality threshold.
+
+    python scripts/measure_temporal_consistency.py --video run/video.mp4 --tracks run/flow.tracks.npz --output run/temporal.json
+    python scripts/measure_temporal_consistency.py --aggregate-files a/temporal.json b/temporal.json --output all.json
+"""
 
 from __future__ import annotations
 
@@ -193,6 +200,9 @@ def analyze_video(video_path: Path, tracks_path: Path) -> dict[str, Any]:
 
 
 def aggregate(paths: list[Path]) -> dict[str, Any]:
+    """Pool the per-pair records of several per-video reports (RGB MAE, shared-region fraction, track inlier coverage,
+    failure counts) into summary statistics.
+    """
     records = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
     mae = [
         pair["rgb_mae_0_to_1"]
@@ -258,6 +268,7 @@ def aggregate(paths: list[Path]) -> dict[str, Any]:
 
 
 def main() -> None:
+    """CLI entry: analyse one video (with its tracks) or aggregate existing reports."""
     cv2.setNumThreads(2)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--video", type=Path)

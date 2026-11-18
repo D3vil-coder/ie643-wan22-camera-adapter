@@ -16,6 +16,10 @@ from PIL import Image
 
 @dataclass(frozen=True)
 class VideoContract:
+    """Output video format: size (multiples of 32), frame count (4k+1), fps and the Wan TI2V VAE/patch strides.
+    Defaults are the official 1280x704, 121 frames, 24 fps, i.e. latents ``[48, 31, 44, 80]``.  Validated on creation.
+    """
+
     width: int = 1280
     height: int = 704
     frames: int = 121
@@ -36,13 +40,16 @@ class VideoContract:
 
     @property
     def latent_frames(self):
+        """Number of latent frames, ``(frames-1)//4 + 1`` (31 for 121 frames)."""
         return (self.frames - 1) // self.temporal_stride + 1
 
     @property
     def latent_shape(self):
+        """``(48, latent_frames, H/16, W/16)``."""
         return (48, self.latent_frames, self.height // 16, self.width // 16)
 
     def record(self):
+        """JSON-able description including whether this is the official reference format."""
         return {
             **asdict(self),
             "latent_shape": list(self.latent_shape),
@@ -147,6 +154,9 @@ def camera_path(
 
 
 def project_points(homographies, xy):
+    """Project pixel points ``[N,2]`` of the first view through homographies ``[T,3,3]``: returns ``[T,N,2]``.
+    Raises if a point goes behind the camera.
+    """
     h = np.asarray(homographies, dtype=np.float64)
     points = np.asarray(xy, dtype=np.float64)
     if h.ndim != 3 or h.shape[1:] != (3, 3) or points.ndim != 2 or points.shape[1] != 2:
@@ -189,12 +199,23 @@ def render_source(
     contract: VideoContract,
     *,
     overscan=1.35,
+    border_mode=None,
+    assert_coverage=False,
+    coverage_stride=4,
 ):
     """Render targets only from actual source pixels; return RGB and first image.
 
     Never supply the overscan source or future RGB to an inference condition.
+
+    v2 additions (defaults reproduce v1 exactly): ``border_mode`` is an OpenCV
+    border flag (default ``BORDER_CONSTANT``, the v1 behaviour); with
+    ``assert_coverage`` every frame is additionally checked on a dense pixel grid
+    (see :func:`coverage_slack`) so no filled pixel can ever leak into a target.
     """
     import cv2
+
+    if border_mode is None:
+        border_mode = cv2.BORDER_CONSTANT
 
     if not isinstance(image, Image.Image):
         image = Image.open(image)
@@ -213,6 +234,10 @@ def render_source(
             [contract.width - 1, contract.height - 1],
         ]
     )
+    if assert_coverage:
+        assert_source_coverage(
+            h, image.size, contract, overscan, stride=coverage_stride
+        )
     rgb = []
     for matrix in h:
         source_to_output = matrix @ first_map
@@ -232,7 +257,7 @@ def render_source(
                 source_to_output,
                 (contract.width, contract.height),
                 flags=cv2.INTER_LINEAR,
-                borderMode=cv2.BORDER_CONSTANT,
+                borderMode=border_mode,
             )
         )
     return np.stack(rgb), {
@@ -241,3 +266,232 @@ def render_source(
         "source_to_first_view": first_map.tolist(),
         "training_target_only_hidden_source_margin": True,
     }
+
+
+# ---------------------------------------------------------------------------
+# v2 additions: magnitude-parameterised motion, coverage and revealed regions.
+# Nothing above this line changes behaviour; v1 callers are unaffected.
+# ---------------------------------------------------------------------------
+
+V2_FAMILIES = ("pan", "tilt", "zoom")
+V2_DIRECTIONS = {"pan": ("left", "right"), "tilt": ("up", "down"), "zoom": ("in", "out")}
+# Canonical direction order used for balanced sampling and reports.
+V2_MOTIONS = tuple((f, d) for f in V2_FAMILIES for d in V2_DIRECTIONS[f])
+V2_MAX_YAW_DEG = 8.0
+V2_MAX_PITCH_DEG = 8.0
+V2_MAX_ZOOM_RATIO = 1.25
+
+
+def v2_mode(family, direction=None):
+    """Map (family, direction) to the v1 mode string, e.g. ("pan","left")->"pan_left"."""
+    if family == "static":
+        return "static"
+    if family not in V2_DIRECTIONS or direction not in V2_DIRECTIONS[family]:
+        raise ValueError(f"Unknown v2 motion: {family!r}/{direction!r}")
+    return f"{family}_{direction}"
+
+
+def motion_amplitudes(
+    family,
+    direction,
+    u,
+    *,
+    max_yaw_deg=V2_MAX_YAW_DEG,
+    max_pitch_deg=V2_MAX_PITCH_DEG,
+    max_zoom_ratio=V2_MAX_ZOOM_RATIO,
+):
+    """Signed end-of-clip physical amplitude for strength u in [0, 1].
+
+    yaw/pitch = +-u*max degrees (right/up positive); zoom ratio = exp(+-u*ln(max))
+    so zoom-out is the exact reciprocal of zoom-in at equal u. Static ignores u.
+    """
+    if not np.isfinite(u) or not 0.0 <= u <= 1.0:
+        raise ValueError("Strength u must be finite and within [0,1]")
+    mode = v2_mode(family, direction)
+    yaw = pitch = 0.0
+    zoom = 1.0
+    if mode == "pan_right":
+        yaw = u * max_yaw_deg
+    elif mode == "pan_left":
+        yaw = -u * max_yaw_deg
+    elif mode == "tilt_up":
+        pitch = u * max_pitch_deg
+    elif mode == "tilt_down":
+        pitch = -u * max_pitch_deg
+    elif mode == "zoom_in":
+        zoom = math.exp(u * math.log(max_zoom_ratio))
+    elif mode == "zoom_out":
+        zoom = math.exp(-u * math.log(max_zoom_ratio))
+    return {"yaw_deg": float(yaw), "pitch_deg": float(pitch), "zoom_ratio": float(zoom)}
+
+
+def camera_path_v2(
+    family,
+    direction,
+    u,
+    contract: VideoContract,
+    *,
+    max_yaw_deg=V2_MAX_YAW_DEG,
+    max_pitch_deg=V2_MAX_PITCH_DEG,
+    max_zoom_ratio=V2_MAX_ZOOM_RATIO,
+    hfov_degrees=60.0,
+    easing="linear",
+):
+    """Strength-parameterised path: same homography convention as :func:`camera_path`.
+
+    Returns ``(H[T,3,3], record)`` with H[t] mapping the first view to frame t and
+    H[0] = I. Strength u scales the *end* amplitude linearly in yaw/pitch and
+    log-linearly in focal zoom, with the same linear easing as v1. Implemented by
+    delegating to the v1 function (magnitude=u), so conventions cannot drift.
+    """
+    amp = motion_amplitudes(
+        family,
+        direction,
+        u,
+        max_yaw_deg=max_yaw_deg,
+        max_pitch_deg=max_pitch_deg,
+        max_zoom_ratio=max_zoom_ratio,
+    )
+    mode = v2_mode(family, direction)
+    matrices, record = camera_path(
+        mode,
+        contract,
+        magnitude=float(u),
+        hfov_degrees=hfov_degrees,
+        yaw_degrees=max_yaw_deg,
+        pitch_degrees=max_pitch_deg,
+        zoom_ratio=max_zoom_ratio,
+        easing=easing,
+    )
+    record.update(
+        {
+            "scope": "camera_rotation_and_focal_zoom_v2",
+            "family": family,
+            "direction": None if family == "static" else direction,
+            "strength_u": float(u),
+            "max_yaw_deg": float(max_yaw_deg),
+            "max_pitch_deg": float(max_pitch_deg),
+            "max_zoom_ratio": float(max_zoom_ratio),
+            **amp,
+        }
+    )
+    return matrices, record
+
+
+def _output_grid(contract: VideoContract, stride):
+    """Output pixel grid with stride, always including the last row/column."""
+    xs = np.unique(np.r_[np.arange(0, contract.width, stride), contract.width - 1])
+    ys = np.unique(np.r_[np.arange(0, contract.height, stride), contract.height - 1])
+    gx, gy = np.meshgrid(xs.astype(np.float64), ys.astype(np.float64))
+    return np.c_[gx.ravel(), gy.ravel()]
+
+
+def coverage_slack(
+    homographies,
+    image_size,
+    contract: VideoContract,
+    overscan,
+    *,
+    stride=4,
+    edge=1.0,
+):
+    """Minimum slack (source pixels) over all frames and a dense output grid.
+
+    Each grid pixel is mapped back to source coordinates through
+    inv(H[t] @ source_to_first_view). Slack is the distance by which the mapped
+    point is inside [edge, size-1-edge] (edge=1 matches the v1 corner check and
+    keeps bilinear taps inside the image). Negative slack means a pixel would be
+    filled by the border mode. Since a homography with positive w maps the convex
+    output rectangle to a convex quadrilateral, the grid (which includes all four
+    borders) bounds the full-frame extremum; the dense grid is belt-and-braces.
+    """
+    width, height = image_size
+    first_map = source_to_first_view(image_size, contract, overscan=overscan)
+    h = np.asarray(homographies, dtype=np.float64)
+    inverse = np.linalg.inv(h @ first_map)
+    points = _output_grid(contract, stride)
+    homogeneous = np.c_[points, np.ones(len(points))]
+    worst = np.inf
+    for matrix in inverse:  # per frame keeps memory flat for stride=1
+        q = homogeneous @ matrix.T
+        if np.any(q[:, 2] <= 0):
+            return -np.inf
+        x = q[:, 0] / q[:, 2]
+        y = q[:, 1] / q[:, 2]
+        slack = min(
+            (x - edge).min(),
+            ((width - 1 - edge) - x).min(),
+            (y - edge).min(),
+            ((height - 1 - edge) - y).min(),
+        )
+        worst = min(worst, float(slack))
+    return worst
+
+
+def assert_source_coverage(
+    homographies, image_size, contract: VideoContract, overscan, *, stride=4
+):
+    """Reject the clip if any output pixel of any frame would not come from the source."""
+    slack = coverage_slack(homographies, image_size, contract, overscan, stride=stride)
+    if not slack >= 0:
+        raise ValueError(
+            f"Camera path leaves the real source for image {tuple(image_size)} at "
+            f"overscan {overscan:.3f} (min slack {slack:.2f} px); reject this clip"
+        )
+    return slack
+
+
+def required_overscan(
+    image_size,
+    contract: VideoContract,
+    homographies_list,
+    *,
+    lo=1.0,
+    hi=4.0,
+    tol=1e-4,
+    stride=8,
+):
+    """Smallest overscan whose crop keeps every pixel of every path inside the source."""
+
+    def ok(overscan):
+        return all(
+            coverage_slack(h, image_size, contract, overscan, stride=stride) >= 0
+            for h in homographies_list
+        )
+
+    if not ok(hi):
+        raise ValueError(f"No overscan <= {hi} covers image {tuple(image_size)}")
+    if ok(lo):
+        return float(lo)
+    while hi - lo > tol:
+        mid = 0.5 * (lo + hi)
+        lo, hi = (lo, mid) if ok(mid) else (mid, hi)
+    return float(hi)  # conservative side of the bracket
+
+
+def revealed_mask(homography, contract: VideoContract, *, stride=1):
+    """Boolean [H,W] (strided) mask of output pixels outside the first view's frame.
+
+    These are the pixels whose content is *newly revealed*: their preimage in the
+    first view lies beyond the frame-0 image area (pixel extents [-0.5, W-0.5]).
+    """
+    h = np.asarray(homography, dtype=np.float64)
+    inverse = np.linalg.inv(h)
+    xs = np.arange(0, contract.width, stride, dtype=np.float64)
+    ys = np.arange(0, contract.height, stride, dtype=np.float64)
+    gx, gy = np.meshgrid(xs, ys)
+    q = np.stack([gx, gy, np.ones_like(gx)], -1) @ inverse.T
+    if np.any(q[..., 2] <= 0):
+        raise ValueError("A projected point goes behind the camera")
+    x, y = q[..., 0] / q[..., 2], q[..., 1] / q[..., 2]
+    return (
+        (x < -0.5)
+        | (x > contract.width - 0.5)
+        | (y < -0.5)
+        | (y > contract.height - 0.5)
+    )
+
+
+def revealed_fraction(homography, contract: VideoContract, *, stride=2):
+    """Fraction of output pixels of this view that are newly revealed (outside the first frame), on a strided grid."""
+    return float(revealed_mask(homography, contract, stride=stride).mean())

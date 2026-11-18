@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 432" width="1000" height="432" font-family="'Segoe UI', Arial, Helvetica, sans-serif"><rect width="1000" height="432" fill="white"/>
+<rect x="0" y="0" width="470" height="128" rx="14" fill="white" stroke="#b3382c" stroke-width="4"/>
+<rect x="0" y="0" width="16" height="128" rx="0" fill="#b3382c" stroke="none" stroke-width="2"/>
+<text x="34" y="38" font-size="28" fill="#b3382c" text-anchor="start" font-weight="700">1  Submission 1 (v1)</text>
+<text x="34" y="75" font-size="23" fill="#222" text-anchor="start">Adapter, 300 updates, zero-filled guide</text>
+<text x="34" y="107" font-size="23" fill="#555555" text-anchor="start">Review: gray borders, no slider</text>
+<line x1="474" y1="64.0" x2="512.0" y2="64.0" stroke="#555" stroke-width="4"/>
+<polygon points="526,64.0 512.0,71.7 512.0,56.3" fill="#555"/>
+<rect x="530" y="0" width="470" height="128" rx="14" fill="white" stroke="#c9811a" stroke-width="4"/>
+<rect x="530" y="0" width="16" height="128" rx="0" fill="#c9811a" stroke="none" stroke-width="2"/>
+<text x="564" y="38" font-size="28" fill="#c9811a" text-anchor="start" font-weight="700">2  Diagnose</text>
+<text x="564" y="75" font-size="23" fill="#222" text-anchor="start">H1 to H4; replicate fill removes gray</text>
+<text x="564" y="107" font-size="23" fill="#555555" text-anchor="start">but leaves stretch streaks</text>
+<rect x="0" y="152" width="470" height="128" rx="14" fill="white" stroke="#0b1f6b" stroke-width="4"/>
+<rect x="0" y="152" width="16" height="128" rx="0" fill="#0b1f6b" stroke="none" stroke-width="2"/>
+<text x="34" y="190" font-size="28" fill="#0b1f6b" text-anchor="start" font-weight="700">3  Data v2</text>
+<text x="34" y="227" font-size="23" fill="#222" text-anchor="start">636 COCO photos, 1,908 clips, six</text>
+<text x="34" y="259" font-size="23" fill="#555555" text-anchor="start">directions, strength u, overscan</text>
+<line x1="474" y1="216.0" x2="512.0" y2="216.0" stroke="#555" stroke-width="4"/>
+<polygon points="526,216.0 512.0,223.7 512.0,208.3" fill="#555"/>
+<rect x="530" y="152" width="470" height="128" rx="14" fill="white" stroke="#0b1f6b" stroke-width="4"/>
+<rect x="530" y="152" width="16" height="128" rx="0" fill="#0b1f6b" stroke="none" stroke-width="2"/>
+<text x="564" y="190" font-size="28" fill="#0b1f6b" text-anchor="start" font-weight="700">4  Train v2</text>
+<text x="564" y="227" font-size="23" fill="#222" text-anchor="start">Replicate guide + passes A and B,</text>
+<text x="564" y="259" font-size="23" fill="#555555" text-anchor="start">415 updates, 37 to 41 s each</text>
+<rect x="0" y="304" width="470" height="128" rx="14" fill="white" stroke="#1a7a2e" stroke-width="4"/>
+<rect x="0" y="304" width="16" height="128" rx="0" fill="#1a7a2e" stroke="none" stroke-width="2"/>
+<text x="34" y="342" font-size="28" fill="#1a7a2e" text-anchor="start" font-weight="700">5  Evaluate, calibrate</text>
+<text x="34" y="379" font-size="23" fill="#222" text-anchor="start">Held-out loss, GT reveal, tracker gain,</text>
+<text x="34" y="411" font-size="23" fill="#555555" text-anchor="start">PAV strength map (28 videos)</text>
+<line x1="474" y1="368.0" x2="512.0" y2="368.0" stroke="#555" stroke-width="4"/>
+<polygon points="526,368.0 512.0,375.7 512.0,360.3" fill="#555"/>
+<rect x="530" y="304" width="470" height="128" rx="14" fill="white" stroke="#1a7a2e" stroke-width="4"/>
+<rect x="530" y="304" width="16" height="128" rx="0" fill="#1a7a2e" stroke="none" stroke-width="2"/>
+<text x="564" y="342" font-size="28" fill="#1a7a2e" text-anchor="start" font-weight="700">6  Camera Studio v2</text>
+<text x="564" y="379" font-size="23" fill="#222" text-anchor="start">Self-installing marimo notebook,</text>
+<text x="564" y="411" font-size="23" fill="#555555" text-anchor="start">tested on a fresh Molab GPU</text>
+</svg>

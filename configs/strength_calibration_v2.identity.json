@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "created": "2026-11-16",
+  "checkpoint_sha256": null,
+  "max_amplitudes": {
+    "yaw_deg": 8.0,
+    "pitch_deg": 8.0,
+    "zoom_ratio": 1.25
+  },
+  "directions": {
+    "pan_left": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    },
+    "pan_right": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    },
+    "tilt_up": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    },
+    "tilt_down": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    },
+    "zoom_in": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    },
+    "zoom_out": {
+      "s": [
+        0.0,
+        1.0
+      ],
+      "u": [
+        0.0,
+        1.0
+      ]
+    }
+  },
+  "fit": {
+    "method": "identity",
+    "note": "No measured calibration: u = s. Replace by scripts/calibrate_strength.py output."
+  }
+}

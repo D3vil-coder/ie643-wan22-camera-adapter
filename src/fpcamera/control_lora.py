@@ -19,6 +19,8 @@ from torch.nn import functional as F
 
 @dataclass(frozen=True)
 class ControlLoRAConfig:
+    """Config of the earlier ray-conditioned ``ControlLoRA`` (kept for reference); v2 uses ``FlowControlConfig``."""
+
     hidden: int = 3072
     rank: int = 32
     alpha: float = 32.0
@@ -63,21 +65,26 @@ class ControlLoRALinear(nn.Module):
 
     @property
     def weight(self):
+        """The frozen base weight (proxy so code that reads ``.weight`` sees the original Parameter)."""
         return self.base.weight
 
     @property
     def bias(self):
+        """The frozen base bias (proxy)."""
         return self.base.bias
 
     @property
     def in_features(self):
+        """Input width of the wrapped linear."""
         return self.base.in_features
 
     @property
     def out_features(self):
+        """Output width of the wrapped linear."""
         return self.base.out_features
 
     def forward(self, x):
+        """``base(x) + enabled * scaling * (x A^T) B^T``; B is zero-initialised so a fresh wrapper is an exact identity."""
         result = self.base(x)
         if self.enabled:
             # Keep adapter parameters/optimizer state in FP32 while using the
@@ -282,6 +289,7 @@ class ControlLoRA(nn.Module):
                 module.enabled = state
 
     def architecture(self) -> dict:
+        """Serialisable architecture record (config, targets, camera feature path) of the legacy ray adapter."""
         return {
             "kind": "wan_control_lora",
             "config": asdict(self.config),
@@ -304,6 +312,7 @@ class ControlLoRA(nn.Module):
         return all(id(p) in current_ids for p in self._original_parameter_refs)
 
     def trainable_parameters(self):
+        """Iterator over the parameters that receive gradients (LoRA A/B, camera projection, gamma)."""
         return (p for p in self.parameters() if p.requires_grad)
 
     def adapter_state_dict(self):
@@ -319,6 +328,9 @@ class ControlLoRA(nn.Module):
         return state
 
     def load_adapter_state_dict(self, state, strict: bool = True):
+        """Load an adapter state dict; with ``strict`` missing/unexpected keys raise (old checkpoints without gamma are tolerated).
+        Returns ``{'missing_keys', 'unexpected_keys'}``.
+        """
         expected = self.adapter_state_dict()
         missing = sorted(set(expected) - set(state))
         unexpected = sorted(set(state) - set(expected))
@@ -353,6 +365,7 @@ class ControlLoRA(nn.Module):
         return {"missing_keys": missing, "unexpected_keys": unexpected}
 
     def close(self):
+        """Remove the hook and restore the original Linear modules."""
         self._hook.remove()
         for path, wrapper in self._target_wrappers.items():
             parent = self.transformer

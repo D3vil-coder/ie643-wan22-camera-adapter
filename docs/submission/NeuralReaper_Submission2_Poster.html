@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>IE 643 Poster: Neural Reaper Team, camera-motion adapter v2</title>
+<!--
+  Editable source of the A4 poster (595.3 x 841.9 pt, portrait).  Layout follows IE643_Poster_Template.pdf (same header, navy frame,
+  two columns with a navy divider, same section order; the template is A0, which has the same aspect ratio as A4).
+  Build with:  python docs/submission/build/build_poster.py
+  Tokens replaced by the build script: math written as a LaTeX string between double braces, prefixed m: (inline) or M: (display), becomes MathML.
+  Left for the author: the two QR boxes (GitHub repository, demo video) are empty on purpose and are filled in later.
+-->
+<style>
+  @page { size: 595.28pt 841.89pt; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; overflow: hidden; }
+  body { width: 595pt; height: 841pt; position: relative; overflow: hidden; color: #000;
+         font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, 'URW Palladio L', serif; font-size: 7.5pt; line-height: 1.17; }
+  .abs { position: absolute; }
+
+  /* ---------- header ---------- */
+  .iitb { left: 24pt; top: 20pt; width: 64pt; }
+  .logo643 { left: 508pt; top: 14pt; width: 68pt; text-align: center; font-family: 'Times New Roman', serif; font-weight: bold; }
+  .logo643 img { width: 58pt; }
+  .logo643 .a { font-size: 11pt; line-height: 1.05; }
+  .logo643 .b { font-size: 6.3pt; line-height: 1.15; }
+  .title { left: 98pt; top: 8pt; width: 398pt; text-align: center; }
+  .title .t1 { font-size: 15pt; font-weight: bold; color: #008000; line-height: 1.15; }
+  .title .t2 { font-size: 11.5pt; font-weight: bold; color: #000080; line-height: 1.14; margin-top: 1pt; }
+  .title .t3 { font-size: 9.5pt; font-weight: bold; color: #000080; margin-top: 3pt; }
+  .title .t4 { font-size: 8.5pt; font-weight: bold; margin-top: 2pt; }
+  .title .t5 { font-size: 7.5pt; margin-top: 0.5pt; }
+
+  /* ---------- frame and columns ---------- */
+  .frame { left: 18pt; top: 98pt; width: 559pt; height: 728pt; border: 4pt solid #000080; background: #fff; }
+  .divider { left: 275.5pt; top: 5pt; width: 2.2pt; height: 710pt; background: #000080; }
+  .col { top: 5pt; }
+  .col.left { left: 6pt; width: 262pt; }
+  .col.right { left: 285pt; width: 262pt; }
+
+  h2 { font-size: 9.6pt; margin: 4.5pt 0 1.5pt; line-height: 1.1; }
+  .col > h2:first-child { margin-top: 0; }
+  p { margin: 0 0 2.5pt; text-align: left; }
+  ul { list-style: none; margin: 0 0 2pt; padding: 0; }
+  li { padding-left: 7pt; text-indent: -7pt; margin-bottom: 1.2pt; }
+  li::before { content: "\2022"; display: inline-block; width: 7pt; text-indent: 0; padding-left: 1pt; }
+  .fig { text-align: center; margin: 2pt 0 1pt; }
+  .fig img { display: block; margin: 0 auto; }
+  .cap { font-size: 6.9pt; text-align: center; line-height: 1.14; margin: 0 0 3pt; }
+  b, strong { font-weight: bold; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 7pt; line-height: 1.1; margin: 1.5pt 0 1pt; }
+  th, td { border: 0.6pt solid #000; padding: 0.8pt 2.5pt; text-align: left; vertical-align: middle; }
+  th { background: #e8ecf8; }
+  td.c, th.c { text-align: center; }
+  td.best { font-weight: bold; }
+  .tcap { font-size: 6.9pt; text-align: center; margin: 0 0 3pt; line-height: 1.14; }
+  .refs { font-size: 6.8pt; line-height: 1.12; }
+  .refs p { margin: 0 0 1.4pt; padding-left: 9pt; text-indent: -9pt; word-break: break-word; }
+
+  math { font-family: 'Cambria Math', 'STIX Two Math', serif; }
+  math[display="block"] { font-size: 8pt; margin: 1pt 0; }
+
+  /* ---------- crop figure ---------- */
+  .crops { display: grid; grid-template-columns: 38pt 1fr; margin: 2pt 0 0; }
+  .crops .heads { grid-column: 2; display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font-size: 6.9pt; font-weight: bold; line-height: 1.1; padding-bottom: 1pt; }
+  .crops .rows { display: flex; flex-direction: column; justify-content: space-around; font-size: 6.9pt; font-weight: bold; line-height: 1.1; }
+  .crops .rows span { display: block; font-weight: normal; color: #555; }
+  .crops img { width: 100%; display: block; }
+
+  /* ---------- workflow flowchart ---------- */
+  .flow { display: grid; grid-template-columns: 1fr 9pt 1fr 9pt 1fr; align-items: stretch; margin: 2pt 0 1pt; row-gap: 0; }
+  .box { border: 0.9pt solid #000080; border-radius: 3pt; padding: 1.5pt 3pt; font-size: 6.9pt; line-height: 1.1; text-align: center; background: #f3f5fc; }
+  .box b { display: block; color: #000080; }
+  .box.bad { border-color: #b3382c; background: #fbefed; }
+  .box.bad b { color: #b3382c; }
+  .box.good { border-color: #1a7a2e; background: #eef7f0; }
+  .box.good b { color: #1a7a2e; }
+  .ar { display: flex; align-items: center; justify-content: center; font-size: 9pt; color: #000080; font-weight: bold; }
+  .ar.dn { grid-column: 5; height: 8pt; align-items: flex-start; line-height: 8pt; }
+
+  /* ---------- architecture figure ---------- */
+  .arch { margin: 2pt 0 1pt; font-size: 6.9pt; line-height: 1.1; }
+  .arch .row { display: flex; align-items: stretch; justify-content: space-between; gap: 2pt; }
+  .arch .node { flex: 1; text-align: center; border: 0.8pt solid #888; border-radius: 2.5pt; padding: 1.2pt; background: #fff; }
+  .arch .node img { width: 100%; display: block; }
+  .arch .node span { display: block; margin-top: 0.8pt; }
+  .arch .node.bad { border-color: #b3382c; }
+  .arch .node.good { border-color: #1a7a2e; border-width: 1.2pt; }
+  .arch .ar { font-size: 8pt; flex: 0 0 9pt; line-height: 1; }
+  .arch .big { flex: 1; text-align: center; border: 1pt solid #000080; border-radius: 3pt; padding: 2pt 3pt; background: #f3f5fc; }
+  .arch .big b { color: #000080; }
+  .arch .dn { text-align: center; font-size: 7pt; line-height: 8.5pt; color: #000080; font-weight: bold; margin: 0.5pt 0; }
+  .arch .pass { flex: 1; display: flex; gap: 2pt; border: 0.8pt solid #1a7a2e; border-radius: 2.5pt; padding: 1.2pt; background: #eef7f0; align-items: center; }
+  .arch .pass img { width: 36pt; flex: none; }
+  .arch .pass div { text-align: left; }
+
+  /* ---------- QR boxes (left empty on purpose) ---------- */
+  .qrrow { display: flex; justify-content: space-around; margin-top: 2pt; }
+  .qrbox { width: 100pt; text-align: center; font-size: 7.5pt; font-weight: bold; }
+  .qrbox .slot { width: 62pt; height: 62pt; margin: 2pt auto 0; border: 0.8pt dashed #777; }
+</style>
+</head>
+<body>
+
+<!-- ======================= HEADER ======================= -->
+<img class="abs iitb" src="assets/iitb_logo.png" alt="IIT Bombay">
+<div class="abs title">
+  <div class="t1">IE 643 Course Project</div>
+  <div class="t2">Trajectory Conditioned Motion Control Adapter for Image to Video Diffusion, Version 2</div>
+  <div class="t3">Neural Reaper Team</div>
+  <div class="t4">Ansh Savla (24b0746)</div>
+  <div class="t5">24b0746@iitb.ac.in</div>
+</div>
+<div class="abs logo643">
+  <img src="assets/ie643_neuron.png" alt="IE 643">
+  <div class="a">IE 643</div>
+  <div class="b">Deep Learning-<br>Theory and Practice</div>
+</div>
+
+<div class="abs frame">
+  <div class="abs divider"></div>
+
+  <!-- ======================= LEFT COLUMN ======================= -->
+  <div class="abs col left" id="left">
+
+    <h2>Abstract</h2>
+    <p>Our v1 camera adapter for the frozen Wan2.2 image-to-video model left gray bands in newly revealed borders and had no
+    calibrated strength control. v2 fixes both with a replicate-padded guide, a hybrid flow-matching loss and an isotonic
+    strength map. Held-out revealed-region loss falls from 0.230 to 0.140.</p>
+
+    <h2>Introduction</h2>
+    <ul>
+      <li><b>Task:</b> one photo in, a 5 s video with a virtual camera move (pan, tilt, zoom) and one strength slider out.</li>
+      <li><b>Why deep learning:</b> a pretrained video diffusion model [1] already knows scenes and motion; a 14.26 M-parameter
+      adapter [2] adds camera control without retraining the 5B model.</li>
+      <li><b>Gap 1:</b> pixels revealed by the move exist in no source frame; v1 filled them with gray, low-detail bands.</li>
+      <li><b>Gap 2:</b> one trained zoom size, so the slider extrapolated; pan and tilt were never trained.</li>
+    </ul>
+
+    <div class="crops">
+      <div class="heads"><div>v1<br>(zero-filled guide)</div><div>v1 + replicate<br>(inference only)</div><div style="color:#000080">v2 (ours)<br>415 updates</div></div>
+      <div class="rows"><div>zoom out<span>food</span></div><div>pan left<span>computers</span></div></div>
+      <div><img src="figures/border_crops_a4.png" alt="border crops"></div>
+    </div>
+    <p class="cap"><b>Figure 1:</b> Revealed border at frame 120 (red line: edge of the revealed region). v1: gray band; replicate fill alone: extruded fragments; v2: the scene continues.</p>
+
+    <p>Our major <b>contributions</b>:</p>
+    <ul>
+      <li><b>Diagnosis:</b> the gray comes from the zero-filled guide (training-free ablation).</li>
+      <li><b>Replicate-padded guide</b> and a <b>hybrid loss</b> (passes A and B), no new parameters.</li>
+      <li><b>One calibrated slider</b> and <b>Camera Studio v2</b>, a self-installing notebook.</li>
+    </ul>
+
+    <h2>Workflow</h2>
+    <div class="flow">
+      <div class="box bad"><b>1 Submission 1</b>gray borders, no slider</div><div class="ar">&rarr;</div>
+      <div class="box"><b>2 Diagnosis</b>hypotheses H1 to H4, replicate-fill test</div><div class="ar">&rarr;</div>
+      <div class="box"><b>3 Data v2</b>636 COCO photos, overscan</div>
+      <div></div><div></div><div></div><div></div><div class="ar dn">&darr;</div>
+      <div class="box good"><b>6 Camera Studio v2</b>marimo notebook, tested on Molab</div><div class="ar">&larr;</div>
+      <div class="box"><b>5 Evaluate, calibrate</b>held-out loss, reveal test, PAV map</div><div class="ar">&larr;</div>
+      <div class="box"><b>4 Train v2</b>replicate guide, passes A and B, 415 updates</div>
+    </div>
+    <p class="cap"><b>Figure 2:</b> Workflow from the Submission 1 review to the deployed notebook.</p>
+
+    <h2>Methods and Approaches</h2>
+    <div class="arch">
+      <div class="row">
+        <div class="node"><img src="assets/guide_src.png" alt=""><span>first-frame latent z<sub>1</sub></span></div>
+        <div class="ar" style="align-self:center">&rarr;<br><span style="font-size:6.4pt">warp H<sub>t</sub></span></div>
+        <div class="node bad"><img src="assets/guide_zero.png" alt=""><span>v1: zero fill</span></div>
+        <div class="node good"><img src="assets/guide_rep.png" alt=""><span><b>v2: replicate fill</b></span></div>
+        <div class="node"><img src="assets/guide_valid.png" alt=""><span>validity V + displacement</span></div>
+      </div>
+      <div class="dn">&darr; guide C (48 + 1 + 2 = 51 channels), zero-init Conv3d, patch embedding</div>
+      <div class="row"><div class="big"><b>Frozen Wan2.2-TI2V-5B</b> transformer, 30 blocks, with LoRA (r = 16) on blocks 0 to 15: 14.26 M trainable parameters</div></div>
+      <div class="dn">&darr; two training passes per update</div>
+      <div class="row">
+        <div class="pass"><img src="assets/weight_A.png" alt=""><div><b>Pass A</b> teacher-relative, weight 0.1 on revealed region R</div></div>
+        <div class="pass"><img src="assets/weight_B.png" alt=""><div><b>Pass B</b> flow matching on the moving clip, weight 1 + 4R</div></div>
+      </div>
+    </div>
+    <p class="cap"><b>Figure 3:</b> Guide (v1 against v2), adapter placement and the two loss passes (loss weights shown as images, white = high).</p>
+    <ul>
+      <li>Guide fill: v1 zero-pads where the warp leaves the image; v2 copies the nearest edge feature, so no shortcut to gray.</li>
+      <li>Loss L = L<sub>A</sub> + L<sub>B</sub>; pass B is plain flow matching [4], so R is generated, not averaged.</li>
+      <li>Strength: a pool-adjacent-violators map [6] per direction turns the slider into the amplitude actually delivered.</li>
+    </ul>
+
+    <h2>Dataset Details</h2>
+    <table>
+      <tr><th></th><th>v1</th><th>v2 (this work)</th></tr>
+      <tr><td>Sources</td><td>36 COCO photos</td><td>636 COCO 2017 [3] (608 train, 28 dev)</td></tr>
+      <tr><td>Clips</td><td>108</td><td>1,908 (static + moving), about 20 GB</td></tr>
+      <tr><td>Motion</td><td>zoom &times;1.12 only</td><td>6 directions, up to 8&deg; or &times;1.25, strength 0.15 to 1</td></tr>
+      <tr><td>Format</td><td colspan="2">1280 x 704, 121 frames, 24 fps; one neutral caption; per-source overscan</td></tr>
+    </table>
+    <p class="tcap"><b>Table 1:</b> Dataset characteristics.</p>
+
+  </div>
+
+  <!-- ======================= RIGHT COLUMN ======================= -->
+  <div class="abs col right" id="right">
+
+    <h2>Novelty Assessment</h2>
+    <table>
+      <tr><th>Task (plan of Submission 1)</th><th>Status and result</th></tr>
+      <tr><td>Strength calibration</td><td>done: pooled gain 0.96 to 1.02</td></tr>
+      <tr><td>Border objective</td><td>done: held-out L<sub>B</sub>|<sub>R</sub> 0.230 &rarr; 0.140</td></tr>
+      <tr><td>Six directions</td><td>done: gain 0.95 to 1.17</td></tr>
+      <tr><td>Loss ablations (A only, B only)</td><td>partly: fill ladder only</td></tr>
+      <tr><td>Bends, speed changes</td><td>not done</td></tr>
+    </table>
+    <p class="tcap"><b>Table 2:</b> Tasks attempted for novelty assessment. Diagnosis: the zero-filled guide is confirmed as the cause of the gray.</p>
+
+    <h2>Results</h2>
+    <p>Qualitative: Figure 1. Quantitative, v1 against v2:</p>
+    <table>
+      <tr><th>Metric (lower loss or score is better)</th><th class="c">v1</th><th class="c">v1 + rep.</th><th class="c">v2</th></tr>
+      <tr><td>Held-out L<sub>B</sub>|<sub>R</sub> (28 sources)</td><td class="c">0.230*</td><td class="c">n/a</td><td class="c best">0.140</td></tr>
+      <tr><td>Border score, food</td><td class="c">0.554</td><td class="c">0.246</td><td class="c best">0.199</td></tr>
+      <tr><td>Border score, computers</td><td class="c">2.135</td><td class="c">2.069</td><td class="c best">1.757</td></tr>
+      <tr><td>Tracker gain, 4 cases (ideal 1)</td><td class="c">0.92 to 1.25</td><td class="c">0.96 to 1.34</td><td class="c best">0.95 to 1.17</td></tr>
+      <tr><td>Reveal LPIPS [5], 7 pairs</td><td class="c">not run</td><td class="c">not run</td><td class="c best">0.276</td></tr>
+    </table>
+    <p class="tcap"><b>Table 3:</b> *v1 adapter under the v2 loss (warm start). Border score: reference-free, a failure detector only.</p>
+    <div class="fig"><img src="figures/results_a4.png" style="width:258pt" alt="plots"></div>
+    <p class="cap"><b>Figure 4:</b> (a) held-out and train-subset loss; (b) delivered over requested motion, 28 videos.</p>
+    <ul>
+      <li>One seed; slider calibration fitted on 28 videos and checked in sample.</li>
+    </ul>
+
+    <h2>Conclusions and Future Work</h2>
+    <ul>
+      <li>v2 removes the gray borders without weakening the motion; the slider is near-linear (about &plusmn;3 %).</li>
+      <li>Limits: 415 of 1,000 planned updates, one seed, in-sample calibration, no loss ablation, weak large reveals.</li>
+      <li>Next: finish training, ablate A and B, check the calibration on held-out images, add bends and speed changes.</li>
+      <li>Flat images drift in brightness; traced to the adapter. An opt-in filter on a separate branch is unverified on detailed images and off by default.</li>
+    </ul>
+
+    <h2>References</h2>
+    <div class="refs">
+      <p>[1] Team Wan, Ang Wang, Baole Ai, Bin Wen et al. (62 authors). Wan: Open and Advanced Large-Scale Video Generative Models, arXiv, 2025. https://arxiv.org/abs/2503.20314</p>
+      <p>[2] Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang and Weizhu Chen. LoRA: Low-Rank Adaptation of Large Language Models, ICLR, 2022. https://arxiv.org/abs/2106.09685</p>
+      <p>[3] Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollar and C. Lawrence Zitnick. Microsoft COCO: Common Objects in Context, ECCV, 2014. https://arxiv.org/abs/1405.0312</p>
+      <p>[4] Yaron Lipman, Ricky T. Q. Chen, Heli Ben-Hamu, Maximilian Nickel and Matt Le. Flow Matching for Generative Modeling, ICLR, 2023. https://arxiv.org/abs/2210.02747</p>
+      <p>[5] Richard Zhang, Phillip Isola, Alexei A. Efros, Eli Shechtman and Oliver Wang. The Unreasonable Effectiveness of Deep Features as a Perceptual Metric, CVPR, 2018. https://arxiv.org/abs/1801.03924</p>
+      <p>[6] Richard E. Barlow, D. J. Bartholomew, J. M. Bremner and H. D. Brunk. Statistical Inference under Order Restrictions, Wiley, 1972.</p>
+    </div>
+
+    <h2>Acknowledgements</h2>
+    <p>We thank the IE 643 instructors for the review that identified the two gaps. GPU runs used Molab sandboxes.</p>
+
+    <h2>Github Link and Demo Video Link</h2>
+    <div class="qrrow">
+      <div class="qrbox">GitHub repository<div class="slot"></div></div>
+      <div class="qrbox">Demo video<div class="slot"></div></div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

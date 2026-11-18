@@ -42,6 +42,9 @@ def camera_prediction_guidance(
     original_instance_forward = transformer.__dict__.get("forward")
 
     def guided_forward(*args, **kwargs):
+        """Replacement ``transformer.forward``: gates the adapter by noise level and applies
+        ``v_static + gain*(v_requested - v_static)`` (legacy path; the v2 default uses ``flow_anchor``).
+        """
         try:
             if active_min_sigma > 0.0:
                 if "timestep" not in kwargs:

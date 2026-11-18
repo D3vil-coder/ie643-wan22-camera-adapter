@@ -9,6 +9,7 @@ from pathlib import Path
 
 
 def file_sha256(path):
+    """Streaming sha256 of a file (8 MiB blocks)."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for block in iter(lambda: f.read(8 << 20), b""):
@@ -17,6 +18,7 @@ def file_sha256(path):
 
 
 def write_json(path, value):
+    """Atomically write JSON (``.partial`` file + ``os.replace``); NaN/inf are rejected, unknown objects are str()-ed."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix(path.suffix + ".partial")
@@ -28,6 +30,10 @@ def write_json(path, value):
 
 @contextlib.contextmanager
 def gpu_lease(root=None):
+    """Exclusive GPU job lock (``<root>/artifacts/gpu.lock``, created with O_EXCL, removed on exit).
+    Raises if another training/encoding/generation job holds it.  Unlike ``flow_train_v2.gpu_lease`` it never
+    replaces a stale lock; delete the file or use the trainer's ``--break-lock``.
+    """
     root = Path(
         root or os.environ.get("FPCAMERA_ROOT", Path(__file__).resolve().parents[2])
     )

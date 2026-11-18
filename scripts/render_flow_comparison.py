@@ -1,4 +1,10 @@
-"""Render a matched input/zoom contact sheet from local, completed I2V folders."""
+"""Submission 1 (v1) helper: render a matched input / zoom-in / zoom-out contact sheet from completed run folders.
+
+Takes the baseline (frozen), zoom-in and zoom-out I2V run folders of one image, aligns the frames and writes a
+contact sheet PNG (and optionally a JSON report).  Never overwrites an existing output.
+
+    python scripts/render_flow_comparison.py --baseline runs/base --zoom-in runs/in --zoom-out runs/out --output sheet.png
+"""
 
 from __future__ import annotations
 
@@ -23,6 +29,7 @@ def _sha(path: Path) -> str:
 
 
 def _read_case(name: str, folder: Path, *, expect_adapter: bool) -> dict:
+    """Read and verify one run folder (video frames, request, run.json)."""
     folder = folder.expanduser().resolve()
     if not folder.is_dir():
         raise FileNotFoundError(folder)
@@ -130,6 +137,7 @@ def _read_case(name: str, folder: Path, *, expect_adapter: bool) -> dict:
 
 
 def _contact_sheet(cases: list[dict], output: Path) -> None:
+    """Compose the matched contact sheet from the three cases."""
     cell_w, cell_h = 480, 264
     row_label_w, margin, gap = 112, 22, 14
     title_h, header_h, row_caption_h = 46, 58, 24
@@ -188,6 +196,7 @@ def render(
     output: Path,
     report: Path | None = None,
 ) -> dict:
+    """Render and write the contact sheet (and optional report); never overwrites."""
     output = output.expanduser().resolve()
     if output.exists():
         raise FileExistsError(f"Refusing to overwrite contact sheet: {output}")
@@ -258,6 +267,7 @@ def render(
 
 
 def main() -> int:
+    """CLI entry."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--baseline",

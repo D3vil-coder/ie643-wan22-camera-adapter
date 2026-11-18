@@ -2,6 +2,8 @@
 
 These are training-target diagnostics, not physical camera motion or generated
 video adherence metrics. No model tensors are loaded.
+
+    python scripts/plot_flow_learning.py --checkpoint-dir artifacts/flow_poc_all --output-png learning.png
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ def _sha256(path: Path) -> str:
 
 
 def _read_checkpoint_history(checkpoint_dir: Path) -> tuple[dict, dict]:
+    """Read the per-checkpoint diagnostic records from the checkpoint directory."""
     checkpoint_dir = Path(checkpoint_dir).resolve()
     latest_path = checkpoint_dir / "latest.json"
     if not latest_path.is_file():
@@ -65,6 +68,7 @@ def _read_checkpoint_history(checkpoint_dir: Path) -> tuple[dict, dict]:
 
 
 def _analyze(sidecar: dict, *, rolling_window: int = 10) -> dict:
+    """Compute rolling statistics of the paired-command diagnostics over the checkpoint history."""
     if rolling_window < 1:
         raise ValueError("rolling_window must be positive")
     history = sidecar["history"]
@@ -149,6 +153,7 @@ def _analyze(sidecar: dict, *, rolling_window: int = 10) -> dict:
         )
 
     def summarize(rows: list[dict]) -> dict:
+        """Mean separation / response statistics of a group of paired records."""
         return {
             "pair_count": len(rows),
             "mean_prediction_separation_rms": float(
@@ -218,6 +223,7 @@ def _analyze(sidecar: dict, *, rolling_window: int = 10) -> dict:
 
 
 def _plot(report: dict, output_png: Path) -> None:
+    """Draw the learning curves."""
     per_pair = report["per_pair"]
     rolling = report["rolling"]
     x = np.asarray([row["step"] for row in rolling])
@@ -319,6 +325,7 @@ def _plot(report: dict, output_png: Path) -> None:
 
 
 def main() -> None:
+    """CLI entry; writes the PNG and/or JSON."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--checkpoint-dir",

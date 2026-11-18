@@ -1,4 +1,10 @@
-"""Verify the frozen Submission 1 package without loading its resume pickle."""
+"""Submission 1 (v1) helper: verify the frozen package against ``submission_manifest.json`` without unpickling anything.
+
+Checks file sizes and sha256 values, the safetensors parameter count (reads only the JSON header) and the provenance
+sources.  Prints PASS or exits with ``FAIL: <reason>``.
+
+    python scripts/verify_frozen_package.py [--root .]
+"""
 
 from __future__ import annotations
 
@@ -15,6 +21,7 @@ MANIFEST = ROOT / "submission_manifest.json"
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
@@ -23,6 +30,7 @@ def sha256(path: Path) -> str:
 
 
 def fail(message: str) -> None:
+    """Abort with ``FAIL: <message>``."""
     raise SystemExit(f"FAIL: {message}")
 
 
@@ -36,6 +44,7 @@ def _is_package_file(path: Path) -> bool:
 
 
 def safetensors_parameter_count(path: Path) -> int:
+    """Parameter count read from the safetensors JSON header only (no tensor payload is loaded)."""
     # Read only the format's JSON header; tensor payloads are neither loaded nor executed.
     with path.open("rb") as handle:
         prefix = handle.read(8)
@@ -53,6 +62,9 @@ def safetensors_parameter_count(path: Path) -> int:
 
 
 def main() -> int:
+    """Verify the file inventory, sizes and sha256 values, the checkpoint / resume digests against ``latest.json`` and the sidecar,
+    the backbone audit, the adapter parameter count and the executed-source hashes.
+    """
     if not MANIFEST.is_file():
         fail(
             "submission_manifest.json is missing; run scripts/freeze_submission_manifest.py after finalizing files"

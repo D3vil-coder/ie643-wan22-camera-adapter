@@ -1,4 +1,10 @@
-"""Create the package inventory after all package files have been finalized."""
+"""Submission 1 (v1) helper: write ``submission_manifest.json`` (size + sha256 of every package file).
+
+Run once, after all package files are final (refuses to overwrite an existing manifest and to include credential or
+cache paths).  ``verify_frozen_package.py`` later checks a package against this manifest.
+
+    python scripts/freeze_submission_manifest.py
+"""
 
 from __future__ import annotations
 
@@ -20,6 +26,7 @@ def _is_package_file(path: Path) -> bool:
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
@@ -28,6 +35,7 @@ def sha256(path: Path) -> str:
 
 
 def main() -> None:
+    """Write ``submission_manifest.json`` (size + sha256 per package file); refuses to overwrite or to include credential paths."""
     if MANIFEST.exists():
         raise SystemExit(f"Refusing to overwrite {MANIFEST}")
     files = {}

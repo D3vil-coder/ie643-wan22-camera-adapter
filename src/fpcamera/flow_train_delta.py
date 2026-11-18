@@ -98,6 +98,9 @@ def _save(adapter,optimizer,out,step,ledger,rng):
 
 # # Paired-control training loop, validation gates, and provenance ledger.
 def train(config,progress=None):
+    """v1 trainer (Submission 1): fit the teacher-relative 'delta' objective on the v1 cache for the configured
+    steps and write checkpoints under ``artifacts/flow_poc_all``.  Kept for provenance; v2 uses ``flow_train_v2``.
+    """
     if not torch.cuda.is_available():raise RuntimeError('Molab CUDA GPU required')
     root=Path(config['project_root']);out=Path(config['output_dir'])
     allowed={root/'artifacts/flow_poc_all'}

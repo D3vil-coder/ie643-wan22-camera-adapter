@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera motion v2 gallery</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--fg:#17181c;--muted:#5d6370;--line:#d9dce3;--accent:#1f6f8b;--good:#1a7f4b}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--card:#1d2026;--fg:#e8eaee;--muted:#a1a7b3;--line:#303540;--accent:#5bb5d3;--good:#5fd39a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:16px}
+h1{font-size:1.6rem;margin:.4rem 0}h2{font-size:1.25rem;margin:2rem 0 .6rem}h3{font-size:1.05rem;margin:0 0 .5rem}
+.muted{color:var(--muted)}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 16px}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:760px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}}
+video,img{width:100%;height:auto;border-radius:6px;background:#000;display:block}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border:1px solid var(--line);border-radius:99px;color:var(--muted);margin-left:6px}
+table{border-collapse:collapse;width:100%;font-size:.85rem;margin:.5rem 0}th,td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}button{font:inherit;padding:4px 12px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:6px;cursor:pointer}
+button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.empty{padding:24px;border:1px dashed var(--line);border-radius:10px;color:var(--muted)}
+details{margin-top:8px}summary{cursor:pointer;color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>Camera motion v2 gallery</h1>
+<p class="muted" id="meta">Loading...</p>
+<div id="app"></div>
+</main>
+<script src="gallery_data.js" onerror="void 0"></script>
+<script>
+(function(){
+const el=(tag,attrs,...kids)=>{const n=document.createElement(tag);for(const[k,v]of Object.entries(attrs||{})){if(k==='text')n.textContent=v;else if(v!==undefined&&v!==null)n.setAttribute(k,v)}for(const kid of kids){if(kid)n.append(kid)}return n};
+const f=(v,d=3)=>(v===null||v===undefined||Number.isNaN(v))?'n/a':Number(v).toFixed(d);
+const B=[['gray_band_score','gray-band'],['colorfulness_ratio','colorfulness R/V'],['hf_ratio','HF R/V'],['seam_score','seam']];
+function video(src,label){const v=el('video',{controls:'',loop:'',muted:'',preload:'metadata',playsinline:'','aria-label':label});v.muted=true;const s=el('source',{src:src,type:'video/mp4'});v.append(s);return v}
+function metricsTable(rows){const t=el('table');const h=el('tr');['run',...B.map(b=>b[1]),'gain'].forEach(x=>h.append(el('th',{text:x})));t.append(h);
+ rows.forEach(r=>{const tr=el('tr');tr.append(el('td',{text:r.name}));B.forEach(b=>tr.append(el('td',{text:f(r.m.border[b[0]])})));tr.append(el('td',{text:f(r.m.gain)}));t.append(tr)});return t}
+function render(d){
+ const app=document.getElementById('app');app.replaceChildren();
+ const meta=document.getElementById('meta');
+ if(!d||!(d.cases&&d.cases.length)&&!(d.sweeps&&d.sweeps.length)){meta.textContent='';app.append(el('div',{class:'empty',text:'No examples yet. Run scripts/generate_examples_v2.py, which fills gallery_data.json/js and gallery/media.'}));return}
+ const m=d.meta||{};meta.textContent=['generated '+(d.generated||'?'),m.checkpoint_v2&&('v2 checkpoint '+m.checkpoint_v2),m.steps&&(m.steps+' steps'),m.seed!==undefined&&('seed '+m.seed),m.calibration&&('calibration '+m.calibration)].filter(Boolean).join(' · ');
+ if(d.cases.length){app.append(el('h2',{text:'Matched before / after: v2 at the same physical amplitude as v1'}));
+  d.cases.forEach(c=>{const card=el('section',{class:'card'});card.append(el('h3',{text:c.name},el('span',{class:'tag',text:c.motion}),el('span',{class:'tag',text:'matched'+(c.amplitude?' · '+c.amplitude:'')})));
+   const KS=['v1','v1_replicate','v2'].filter(k=>c[k]);const NM={v1:'v1 (submission 1)',v1_replicate:'v1 + replicate fill',v2:'v2 (matched amplitude)'};
+   const g=el('div',{class:'grid '+(KS.length>2?'g3':'g2')});const vids=[];
+   KS.forEach(k=>{const box=el('div');box.append(el('div',{class:'muted',text:NM[k]}));const v=video(c[k].video,c.name+' '+k);vids.push(v);box.append(v);g.append(box)});
+   card.append(g);
+   if(vids.length>1){const b=el('button',{type:'button',text:'Play both'});b.onclick=()=>vids.forEach(v=>{v.currentTime=0;v.play()});card.append(el('p',{},b))}
+   card.append(metricsTable(KS.map(k=>({name:NM[k],m:c[k].metrics}))));
+   if(c.contact_sheet){const dt=el('details');dt.append(el('summary',{text:'Contact sheet'}),el('img',{src:c.contact_sheet,alt:'Contact sheet for '+c.name,loading:'lazy'}));card.append(dt)}
+   app.append(card)})}
+ if(d.sweeps.length){app.append(el('h2',{text:'Extended range (v2 only): strength sweep up to 8 deg / x1.25, beyond v1'}));
+  d.sweeps.forEach(s=>{const card=el('section',{class:'card'});card.append(el('h3',{text:s.name},el('span',{class:'tag',text:s.motion}),el('span',{class:'tag',text:'extended'})));
+   const g=el('div',{class:'grid g4'});const vids=[];
+   s.entries.forEach(e=>{const box=el('div');box.append(el('div',{class:'muted',text:'s = '+f(e.s,2)+(e.label?' · '+e.label:'')}));const v=video(e.video,s.name+' s='+e.s);vids.push(v);box.append(v);g.append(box)});
+   card.append(g);const b=el('button',{type:'button',text:'Play all'});b.onclick=()=>vids.forEach(v=>{v.currentTime=0;v.play()});card.append(el('p',{},b));
+   const t=el('table');const h=el('tr');['s','u','observed a_obs','gain',...B.map(x=>x[1])].forEach(x=>h.append(el('th',{text:x})));t.append(h);
+   s.entries.forEach(e=>{const tr=el('tr');[f(e.s,2),f(e.metrics.strength_u),f(e.metrics.a_obs),f(e.metrics.gain),...B.map(x=>f(e.metrics.border[x[0]]))].forEach(x=>tr.append(el('td',{text:x})));t.append(tr)});card.append(t);
+   if(s.contact_sheet){const dt=el('details');dt.append(el('summary',{text:'Contact sheet'}),el('img',{src:s.contact_sheet,alt:'Strength sweep contact sheet for '+s.name,loading:'lazy'}));card.append(dt)}
+   app.append(card)})}
+}
+if(window.GALLERY_DATA){render(window.GALLERY_DATA)}
+else{fetch('gallery_data.json').then(r=>r.json()).then(render).catch(()=>render(null))}
+})();
+</script>
+</body>
+</html>

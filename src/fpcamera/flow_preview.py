@@ -1,4 +1,10 @@
-"""CPU-only preview of the actual first-frame crop and requested camera geometry."""
+"""CPU-only preview of the first-frame crop and the requested camera geometry (no model needed).
+
+Used by the notebook interface (``notebooks/camera_interface_v2.py`` / ``camera_studio_v2.py``) to show the user the
+exact 1280x704 aspect-fill crop the model will see and arrows for the requested scene-point displacement
+(derived from the homographies through ``flow_geometry.project_points``).  Entry points: ``conditioning_crop``,
+``geometry_preview_svg``.
+"""
 
 from __future__ import annotations
 

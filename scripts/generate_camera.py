@@ -1,4 +1,12 @@
-"""Run the pinned native Wan flow-camera adapter from the clean project root."""
+"""Generate one video from one image (v1-style CLI around ``fpcamera.flow_infer.generate``).
+
+Defaults come from ``configs/inference_default.json`` (v1 preset modes); flags override.  For the v2 motion + strength
+interface use ``python -m fpcamera.flow_infer --config configs/inference_v2.json ...`` (or the notebook) instead;
+this wrapper does not expose ``--motion`` / ``--strength``.  Needs the GPU host with the pinned Wan base in the HF
+cache.  Refuses to overwrite an existing output directory.
+
+    python scripts/generate_camera.py --image photo.jpg --output outputs/zoom --mode zoom_in --magnitude 1.0
+"""
 
 from __future__ import annotations
 
@@ -13,6 +21,7 @@ DEFAULT_CONFIG = PROJECT_ROOT / "configs/inference_default.json"
 
 
 def main() -> int:
+    """Parse flags over the JSON defaults and call ``fpcamera.flow_infer.generate``; prints a one-line summary."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--image", type=Path, required=True)
@@ -45,6 +54,17 @@ def main() -> int:
     parser.add_argument(
         "--component",
         choices=("full", "guide_only", "attention_only", "lora_only"),
+    )
+    parser.add_argument(
+        "--attn-backend",
+        choices=("auto", "cudnn", "flash", "efficient"),
+        default="auto",
+        help="opt-in SDPA kernel priority (speed only, not bit-identical); auto = unchanged",
+    )
+    parser.add_argument(
+        "--compile-blocks",
+        action="store_true",
+        help="opt-in regional torch.compile of the transformer blocks (speed only, not bit-identical)",
     )
     args = parser.parse_args()
     config_path = (
@@ -115,6 +135,8 @@ def main() -> int:
         camera_min_sigma=camera_min_sigma,
         camera_residual_anchor=camera_residual_anchor,
         component=component,
+        attn_backend=args.attn_backend,
+        compile_blocks=args.compile_blocks,
     )
     print(
         f"Generated {result['video']['decoded_frames']} frames at {result['video']['fps']} fps; "

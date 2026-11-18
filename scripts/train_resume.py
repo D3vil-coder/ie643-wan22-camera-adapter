@@ -1,4 +1,11 @@
-"""Resume the frozen Submission 1 checkpoint using project-relative paths."""
+"""Submission 1 (v1) helper: resume the frozen step-300 checkpoint with project-relative paths.
+
+Verifies the archived training-source hashes against the checkpoint sidecar and continues the v1 run from its resume
+state up to ``--stop-after-updates`` (between 300 and the configured total).  ``--check-only`` verifies without loading
+a model or writing anything.  v2 training uses ``scripts/train_v2.py`` (auto-resume).
+
+    python scripts/train_resume.py --stop-after-updates 400 [--check-only]
+"""
 
 from __future__ import annotations
 
@@ -13,6 +20,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def main() -> int:
+    """CLI entry (see module docstring)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--config", type=Path, default=PROJECT_ROOT / "configs/train_resume_300.json"

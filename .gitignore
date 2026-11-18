@@ -14,3 +14,46 @@ runs/
 __marimo__/
 .ipynb_checkpoints/
 wandb/
+
+# generated gallery media/sheets/data-js; the html template and the json template stay tracked
+gallery/*
+!gallery/index.html
+!gallery/gallery_data.json
+
+# ---- added in the pre-publication pass ----
+# local tool / agent / browser state
+.playwright-mcp/
+.agents/
+.claude/
+.pytest_cache/
+.vscode/
+.idea/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.DS_Store
+Thumbs.db
+
+# secrets and local credentials (the tools read tokens from the environment or a local keys.env outside the repo)
+.env
+*.env
+keys.env
+
+# generated data and transfer scratch: v2 sources/caches, HF pack/backup work dirs, ledgers, git bundles
+data/**/_work/
+.hf_pack_*/
+.hf_*
+*.bundle
+*.npz
+*.npy
+*.partial
+*.tmp
+*.corrupt
+*.log
+
+# personal photographs must never be committed: no loose photos, and the run folders of the author's own test photo
+*.jpeg
+*.jpg
+**/photo/
+**/photo_*/
+**/userphoto*/

@@ -1,4 +1,12 @@
-"""Paired held-out denoising diagnostic; never a generated-motion acceptance test."""
+"""v1 paired held-out denoising diagnostic (legacy; never a generated-motion acceptance test).
+
+Pipeline position: after v1 training, before looking at videos.  For development zoom clips it feeds the noisy
+latent at sigma 0.5 / 0.8 / 1.0 to the frozen backbone with (a) the correct guide, (b) the opposite-motion guide and
+(c) the adapter disabled, and reports prediction RMS differences (does the adapter react to the requested motion?).
+Needs a v1 checkpoint with its sidecar json (digest + unchanged-backbone audit).  Legacy: it imports ``flow_train``
+(the original uniform v1 trainer), which is not part of this repository; ``flow_validate_delta`` is the working
+equivalent for the shipped v1 trainer and ``flow_validate_v2`` / ``scripts/eval_dev_reveal.py`` replace both for v2.
+"""
 
 from __future__ import annotations
 import argparse, json, time
@@ -116,6 +124,9 @@ def _clean_motion_diagnostics(predictions, noisy, clean, static, sigma):
 
 
 def validate(root, checkpoint, index, output, source_limit=2):
+    """Generate frozen-baseline and adapter videos for the first ``source_limit`` cached sources of ``index`` and
+    write comparison metrics under ``output`` (must not exist).  Verifies the checkpoint digest first.
+    """
     root, checkpoint, index, output = map(Path, (root, checkpoint, index, output))
     if output.exists():
         raise FileExistsError(output)

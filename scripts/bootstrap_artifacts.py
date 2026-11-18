@@ -1,4 +1,12 @@
-"""On the GPU host, restore the full local package from a supplied bundle."""
+"""Submission 1 (v1) helper: restore the full local package from a supplied bundle on the GPU host.
+
+Pipeline position: one-time setup of the frozen v1 package (large files that are not in git: checkpoint, cache,
+media; see ``ASSETS.md``).  Verifies the bundle with ``verify_frozen_package.py`` (hashes from
+``submission_manifest.json``), copies the files into the target checkout, re-verifies the copy and checks that the
+pinned Wan base revision is in the local Hugging Face cache (``--download-base`` fetches it).  No token is copied.
+
+    python scripts/bootstrap_artifacts.py --full-package /path/to/full_package [--target-project .] [--download-base]
+"""
 
 from __future__ import annotations
 
@@ -18,6 +26,7 @@ FORBIDDEN_PARTS = {".cache", "credentials", "credential", "tokens", "accounts"}
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(8 << 20), b""):
@@ -26,6 +35,7 @@ def sha256(path: Path) -> str:
 
 
 def require_gpu() -> None:
+    """Exit with install instructions unless torch and a CUDA device are available (this setup is GPU-host only)."""
     try:
         import torch
     except Exception as exc:
@@ -40,6 +50,9 @@ def require_gpu() -> None:
 
 
 def verify_base(download: bool) -> Path:
+    """Return the local snapshot path of the pinned Wan base revision; with ``download`` fetch it from the Hub,
+    otherwise exit with instructions if it is missing from the local cache.
+    """
     try:
         from huggingface_hub import snapshot_download
 
@@ -62,6 +75,7 @@ def verify_base(download: bool) -> Path:
 
 
 def main() -> int:
+    """Verify the bundle, copy its files into the target project, re-verify the copy and check the pinned base model."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--full-package",

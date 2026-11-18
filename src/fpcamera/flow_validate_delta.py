@@ -87,6 +87,9 @@ def _write_new_json(path: Path, record: dict) -> None:
 
 
 def validate(root: Path, checkpoint: Path, index: Path, output: Path) -> dict:
+    """Validate a v1 delta-trained checkpoint on cached clips (frozen vs adapter prediction error) and write
+    a record under ``output`` (must not exist); checks the checkpoint sha256 against its sidecar.
+    """
     root, checkpoint, index, output = map(Path, (root, checkpoint, index, output))
     if output.exists():
         raise FileExistsError(output)
@@ -280,6 +283,7 @@ def validate(root: Path, checkpoint: Path, index: Path, output: Path) -> dict:
 
 
 def main() -> int:
+    """CLI wrapper around ``validate`` (``--project-root --checkpoint --index --output``)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-root", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)

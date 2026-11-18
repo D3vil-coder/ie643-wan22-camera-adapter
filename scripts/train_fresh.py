@@ -1,4 +1,12 @@
-"""Start a new step-300 training run from zero without reusing checkpoint state."""
+"""Submission 1 (v1) helper: start a new 300-update training run from zero (no checkpoint reuse).
+
+Verifies that the byte-exact executed training sources (``src/fpcamera/provenance/executed_source``) match the hashes
+recorded in the frozen step-300 checkpoint's sidecar, that the v1 cache index is unchanged and that the config has no
+resume / warm-start state, then trains with ``flow_train_delta`` under ``artifacts/<run-name>``.  v2 training uses
+``scripts/train_v2.py`` instead.
+
+    python scripts/train_fresh.py --run-name fresh1 --stop-after-updates 300 [--check-only]
+"""
 
 from __future__ import annotations
 
@@ -25,6 +33,7 @@ EXPECTED_SOURCE_NAMES = {
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(8 << 20), b""):
@@ -33,6 +42,7 @@ def sha256(path: Path) -> str:
 
 
 def verify_sources(root: Path) -> dict:
+    """Check the executed-source snapshot and the cache index against the frozen checkpoint's sidecar; returns the sidecar."""
     sidecar_path = root / "artifacts/flow_poc_all/adapter_000300.json"
     sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
     expected = sidecar["identity"]["source_hashes"]
@@ -54,6 +64,7 @@ def verify_sources(root: Path) -> dict:
 
 
 def main() -> int:
+    """CLI entry (see module docstring)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--run-name",

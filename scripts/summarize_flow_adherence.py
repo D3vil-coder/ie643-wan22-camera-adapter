@@ -4,6 +4,9 @@ This CPU-only report complements measure_flow_video.py. It compares actual
 tracked points with requested homographies, penalizes missing expected-visible
 tracks by one image diagonal, and optionally compares a matched reference run.
 It measures apparent 2D image motion, not physical camera pose or scene depth.
+
+    python scripts/summarize_flow_adherence.py --tracks run/flow.tracks.npz --request run/request.json
+        --output run/adherence.json [--static-tracks static/flow.tracks.npz]
 """
 
 from __future__ import annotations
@@ -55,6 +58,7 @@ def _error_metrics(
     expected_visible: np.ndarray,
     diagonal: float,
 ) -> dict:
+    """Endpoint error statistics of the tracked points against the requested homographies."""
     eligible = expected_visible
     observed = eligible & visible
     missing = eligible & ~visible
@@ -187,6 +191,7 @@ def _motion_metrics(
     expected_visible: np.ndarray,
     ransac_inliers: np.ndarray | None = None,
 ) -> dict:
+    """Signed motion gain (observed displacement projected on the requested one), cosine and amplitudes."""
     actual_delta = tracks - tracks[0:1]
     expected_delta = expected - expected[0:1]
     # Exclude the reference frame and zero-motion coordinates from motion
@@ -250,6 +255,9 @@ def _motion_metrics(
 def summarize(
     tracks_path: Path, request_path: Path, static_tracks_path: Path | None = None
 ) -> dict:
+    """Adherence summary of a tracked video to its request (optionally relative to a matched static run); returns a dict
+    including ``signed_motion_gain_pathwide``, the number the strength calibration is built on.
+    """
     tracks, visible, initial = _read_tracks(tracks_path)
     request = json.loads(request_path.read_text(encoding="utf-8"))
     contract = request["contract"]
@@ -418,6 +426,7 @@ def summarize(
 
 
 def main() -> int:
+    """CLI entry; writes the json report."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tracks", type=Path, required=True)
     parser.add_argument("--request", type=Path, required=True)

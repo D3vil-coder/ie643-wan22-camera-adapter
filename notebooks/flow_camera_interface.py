@@ -277,7 +277,7 @@ def _(Path, mo, project_root):
                             progress_path = run_dir / "progress.json"
                             progress = None
                             try:
-                            progress = _json.loads(progress_path.read_text(encoding="utf-8"))
+                                progress = _json.loads(progress_path.read_text(encoding="utf-8"))
                             except (OSError, ValueError):
                                 pass
                             with self.guard:

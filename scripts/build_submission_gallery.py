@@ -1,4 +1,11 @@
-"""Build a fully offline HTML gallery and contact sheets for Submission 1."""
+"""Submission 1 (v1) helper: build a fully offline HTML gallery and contact sheets from the example runs.
+
+Reads ``<submission-root>/examples`` (verified run folders with ``run.json`` and the measurement json files), renders
+contact sheets and a self-contained ``gallery/index.html`` that works without a server.  v2 galleries are produced by
+``generate_examples_v2.py`` / ``gallery/index.html`` instead.
+
+    python scripts/build_submission_gallery.py --submission-root path/to/submission
+"""
 
 from __future__ import annotations
 
@@ -27,6 +34,7 @@ SAMPLE_FRAMES = (40, 80, 120)
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(8 << 20), b""):
@@ -35,6 +43,7 @@ def sha256(path: Path) -> str:
 
 
 def read_json(path: Path) -> dict:
+    """Read a JSON file."""
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -80,6 +89,7 @@ def make_contact_sheet(input_image: Path, video: Path, output: Path) -> None:
 
 
 def motion_summary(path_report: dict) -> dict:
+    """Reduce a path-adherence report to the few motion numbers shown in the gallery."""
     motion = path_report.get("motion") or {}
     adherence = path_report.get("adherence") or {}
     expected = adherence.get("expected_visible_tracks_per_frame") or []
@@ -112,6 +122,7 @@ def motion_summary(path_report: dict) -> dict:
 
 
 def preservation_summary(report: dict) -> dict:
+    """Reduce a preservation report to the few appearance-preservation numbers shown in the gallery."""
     summary = report.get("temporal_summary") or {}
     return {
         "mean_ssim_gray_11x11": summary.get("mean_ssim_gray_11x11"),
@@ -364,6 +375,7 @@ def _stage_regressions(submission_root: Path) -> None:
 
 
 def build(submission_root: Path) -> dict:
+    """Render contact sheets and the offline gallery for every example run; returns a summary dict."""
     examples = submission_root / "examples"
     gallery = submission_root / "gallery"
     contact_dir = gallery / "contact_sheets"
@@ -490,6 +502,7 @@ header,main{{max-width:1180px;margin:0 auto;padding:28px 22px}}header{{padding-t
 
 
 def main() -> int:
+    """CLI entry; prints a JSON summary of the built gallery."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--submission-root", type=Path, default=DEFAULT_ROOT)
     args = parser.parse_args()

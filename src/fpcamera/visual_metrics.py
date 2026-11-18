@@ -24,6 +24,10 @@ DINO_REVISION = "ed25f3a31f01632728cabb09d1542f84ab7b0056"
 
 @dataclass(frozen=True)
 class PreservationThresholds:
+    """Pass/fail thresholds of the semantic-preservation gate (DINOv2 similarity, first-frame SSIM,
+    flow-compensated temporal L1, flow validity, parallax confidence).
+    """
+
     min_dino_mean_cosine: float = 0.80
     min_first_frame_ssim: float = 0.75
     max_flow_compensated_temporal_l1: float = 0.06
@@ -221,6 +225,9 @@ class DINOv2SemanticScorer:
     def score(
         self, reference: Any, frames: Any, *, frame_stride: int = 4
     ) -> dict[str, Any]:
+        """Cosine similarity of L2-normalised DINOv2 CLS features between the reference image and every
+        ``frame_stride``-th frame (plus the last); returns per-frame cosines with mean/min (semantic preservation).
+        """
         import torch
         import torch.nn.functional as F
 
@@ -269,6 +276,7 @@ class DINOv2SemanticScorer:
         }
 
     def offload(self):
+        """Move the DINOv2 model to the CPU and free GPU memory."""
         model, self.model = self.model, None
         self.processor = None
         if model is not None:
@@ -430,6 +438,7 @@ def joint_acceptance(
     )
 
     def finite(value):
+        """True for finite real numbers (not bool / NaN / inf)."""
         return (
             isinstance(value, (int, float))
             and not isinstance(value, bool)

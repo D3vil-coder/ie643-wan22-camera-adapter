@@ -1,0 +1,57 @@
+{
+  "schema": "fpcamera_data_v2",
+  "seed": 20261116,
+  "video_contract": {"width": 1280, "height": 704, "frames": 121, "fps": 24},
+  "camera": {
+    "hfov_degrees": 60.0,
+    "easing": "linear",
+    "max_yaw_deg": 8.0,
+    "max_pitch_deg": 8.0,
+    "max_zoom_ratio": 1.25
+  },
+  "sampling": {
+    "u_min": 0.15,
+    "u_max": 1.0,
+    "static_clips_per_source": 1,
+    "moving_clips_per_source": 2
+  },
+  "overscan": {
+    "policy": "per_source",
+    "fixed": 1.53,
+    "floor": 1.35,
+    "margin": 0.02,
+    "cap": 1.6,
+    "note": "per_source: overscan = clip(required_for_all_six_max_strength_paths + margin, floor, cap), constant across the clips of one source so every clip shares one first-view crop. fixed: one number that is safe for any aspect ratio (derived 1.5125 for 16:9-or-wider images, tilt-limited; +0.02 margin, rounded up). The plan's 1.45 is NOT enough for tilt at 8 deg on 16:9 images."
+  },
+  "render": {
+    "border_mode": "BORDER_REFLECT_101",
+    "assert_coverage": true,
+    "coverage_stride": 4
+  },
+  "sources": {
+    "manifest": "data/v2/sources_v2.json",
+    "image_root": ".",
+    "training_caption": "A photograph of a scene. One continuous camera shot."
+  },
+  "cache": {
+    "dir": "data/v2/cache_1280x704_f121_v2",
+    "normalization": "native_fp32_vae_mode_normalize_then_bf16",
+    "bytes_per_clip_estimate": 11000000,
+    "disk_safety_factor": 1.1
+  },
+  "selection": {
+    "dataset": "COCO 2017 train",
+    "annotations_url": "http://images.cocodataset.org/annotations/annotations_trainval2017.zip",
+    "image_url_template": "http://images.cocodataset.org/train2017/{file_name}",
+    "target_new_sources": 600,
+    "new_dev_sources": 24,
+    "min_side_px": 427,
+    "min_category_area_fraction": 0.05,
+    "ahash_hamming_max": 5,
+    "grayscale_channel_std_max": 3.0,
+    "download_workers": 4,
+    "include_v1_sources": true,
+    "v1_manifest": "data/flow_poc/pilot_sources.json",
+    "v1_sources_dir": "data/flow_poc/sources"
+  }
+}

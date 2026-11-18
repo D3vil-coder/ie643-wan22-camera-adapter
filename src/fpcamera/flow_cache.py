@@ -1,4 +1,15 @@
-"""Immutable synthetic camera-motion caches at an explicit Wan I2V contract."""
+"""v1 synthetic camera-motion cache at an explicit Wan I2V contract (static / zoom-in / zoom-out only).
+
+Pipeline position: data -> clip synthesis -> **VAE latent cache** -> training.  For each source image in
+``data/flow_poc/pilot_sources.json`` it renders virtual-camera clips from real source pixels
+(``flow_geometry.render_source``), encodes them with the native frozen Wan VAE (``encode_rgb``: FP32,
+posterior mode, per-channel normalisation, bf16) and writes immutable safetensors plus an ``index.jsonl``.
+The v2 cache (``flow_cache_v2``, six directions, many magnitudes) reuses ``encode_rgb`` and ``NORMALIZATION`` from here.
+
+Main entry points: ``prepare`` (build), ``load_cached`` (verified read), ``encode_rgb``.  CLI (v1, GPU)::
+
+    python -m fpcamera.flow_cache --project-root . --frames 121 --max-new-clips 24
+"""
 
 from __future__ import annotations
 
@@ -70,6 +81,7 @@ def _save_tensor_file(path, tensors, metadata):
 
 
 def load_cached(row, root):
+    """Load one v1 cache row + its reference file, verifying both sha256 values and the tensor contract."""
     root = Path(root)
     path = root / row["cache_path"]
     reference = root / row["reference_path"]
@@ -103,6 +115,10 @@ def prepare(
     width=1280,
     height=704,
 ):
+    """Build the v1 cache for the sources in ``data/flow_poc/pilot_sources.json``: render each requested mode
+    (static / zoom_in / zoom_out) with ``render_source``, VAE-encode, write immutable safetensors + index rows.
+    Refuses to overwrite existing files; returns the index records.
+    """
     root = Path(root)
     contract = VideoContract(width=width, height=height, frames=frames)
     manifest_path = root / "data/flow_poc/pilot_sources.json"
@@ -275,6 +291,7 @@ def prepare(
 
 # # Command-line entry point for cache preparation.
 def main():
+    """CLI wrapper around ``prepare`` (``--project-root``, ``--frames``, ``--max-new-clips``, ``--modes``)."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--project-root", type=Path, required=True)
     parser.add_argument("--frames", type=int, default=121)

@@ -1,0 +1,63 @@
+{
+  "name": "v2_full",
+  "seed": 20261116,
+  "updates": 1000,
+  "effective_batch": 2,
+  "learning_rate": 0.0001,
+  "weight_decay": 0.01,
+  "warmup": 25,
+  "min_lr_ratio": 0.1,
+  "grad_clip": 1.0,
+  "objective": {
+    "p_static": 0.1,
+    "p_text_dropout": 0.1,
+    "alpha_R": 0.1,
+    "lambda_B": 1.0,
+    "beta": 4.0,
+    "static_pass_b": false,
+    "sigma_A": {
+      "mean": 0.8,
+      "std": 0.075,
+      "lower": 0.6,
+      "upper": 1.0
+    },
+    "sigma_B": {
+      "mean": 0.7,
+      "std": 0.15,
+      "lower": 0.2,
+      "upper": 1.0
+    }
+  },
+  "fill_mode": "replicate",
+  "architecture": {
+    "hidden": 3072,
+    "rank": 16,
+    "alpha": 16.0,
+    "layers": 16
+  },
+  "video_contract": {
+    "width": 1280,
+    "height": 704,
+    "frames": 121,
+    "fps": 24
+  },
+  "checkpointing": "full",
+  "checkpoint": {
+    "every_updates": 25,
+    "every_seconds": 600,
+    "keep_last": 3,
+    "keep_every": 250
+  },
+  "max_peak_gib": 80,
+  "expected_backbone_sha256": "a02044a1e4e535b1edfb1f6a3a1cf99fd18310c53874f157f1be27cef19294ed",
+  "verify_backbone_hash": true,
+  "split": "train",
+  "families": null,
+  "caches": [
+    {
+      "index": "data/v2/cache_1280x704_f121_v2/index.jsonl",
+      "weight": 1.0
+    }
+  ],
+  "init_from": "artifacts/flow_poc_all/adapter_000300.safetensors"
+}

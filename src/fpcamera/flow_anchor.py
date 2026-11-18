@@ -10,6 +10,8 @@ from __future__ import annotations
 from contextlib import contextmanager
 import math
 
+import torch
+
 
 def _sigma(timestep):
     value = timestep.amax().item() if hasattr(timestep, "amax") else float(timestep)
@@ -30,6 +32,7 @@ def frozen_camera_difference(
     text_guidance=5.0,
     active_min_sigma=0.6,
     reference="static",
+    batch_forwards=True,
 ):
     """Native text CFG(F0) + camera_gain * (Fphi(text,cam)-Fphi(text,static)).
 
@@ -41,6 +44,13 @@ def frozen_camera_difference(
     With reference='teacher', subtract the already computed frozen positive
     prediction instead; this uses three forwards per active CFG step and
     matches the teacher-relative requested-condition training target directly.
+
+    batch_forwards (lossless speed option, default on): once the negative-text tensor has been seen (from
+    step 2 on), the frozen positive and frozen negative predictions of a step are computed in ONE batch-2
+    forward (adapter disabled, so no per-sample adapter handling is needed) at the positive call; the
+    negative call then returns its cached half after verifying that its latents/timestep/text are exactly
+    the ones that were batched, else it recomputes normally.  The adapted passes stay batch-1.  Same math;
+    results differ from sequential calls only at kernel-nondeterminism level.
     """
     camera_gain = float(camera_gain)
     text_guidance = float(text_guidance)
@@ -57,6 +67,8 @@ def frozen_camera_difference(
     state = {
         "native_calls": 0,
         "original_forward_calls": 0,
+        "batched_forward_calls": 0,
+        "batch_forwards": bool(batch_forwards),
         "active_positive_calls": 0,
         "native_calls_per_step": 2 if cfg else 1,
         "formula": (
@@ -75,8 +87,41 @@ def frozen_camera_difference(
     positive_ptr = None
     negative_ptr = None
     pending_sigma = None
+    negative_text = None  # reference to the negative text tensor (stable storage is asserted below)
+    cached_negative = None  # (hidden_states, timestep, text, prediction) from a batched positive call
+
+    def batched_frozen(args, kwargs):
+        """Frozen positive+negative in one batch-2 forward; returns (positive_result, negative_result)."""
+        h, t, txt = kwargs["hidden_states"], kwargs["timestep"], kwargs["encoder_hidden_states"]
+        merged = dict(kwargs)
+        merged["hidden_states"] = torch.cat((h, h), 0)
+        merged["timestep"] = torch.cat((t, t), 0)
+        merged["encoder_hidden_states"] = torch.cat((txt, negative_text), 0)
+        state["batched_forward_calls"] += 1
+        out = original(*args, **merged)[0]
+        if out.shape[0] != 2:
+            raise RuntimeError("Batched frozen forward returned an unexpected batch")
+        return (out[:1],), (out[1:],)
+
+    def can_batch(kwargs):
+        """True when this positive call can run frozen-positive + frozen-negative as one batch-2 forward (CFG on,
+        negative text already seen, batch-1 inputs of matching shape).
+        """
+        h, t = kwargs.get("hidden_states"), kwargs.get("timestep")
+        return (
+            batch_forwards
+            and cfg
+            and negative_text is not None
+            and hasattr(h, "shape")
+            and hasattr(t, "shape")
+            and h.shape[0] == 1
+            and t.shape[0] == 1
+            and "hidden_states" in kwargs
+            and kwargs["encoder_hidden_states"].shape == negative_text.shape
+        )
 
     def original(*args, **kwargs):
+        """Run the transformer's native forward (counting calls); enforces the ``return_dict=False`` tuple contract."""
         state["original_forward_calls"] += 1
         result = forward(*args, **kwargs)
         if not isinstance(result, tuple) or len(result) != 1:
@@ -84,7 +129,11 @@ def frozen_camera_difference(
         return result
 
     def anchored(*args, **kwargs):
-        nonlocal positive_ptr, negative_ptr, pending_sigma
+        """Replacement ``transformer.forward``.  Identifies positive vs negative text calls (native separate-pass CFG
+        order is asserted via text-tensor storage), computes the frozen baseline F0 for every call and, for positive
+        calls inside the active sigma window, adds ``camera_gain/text_guidance * (F_requested - F_reference)``.
+        """
+        nonlocal positive_ptr, negative_ptr, pending_sigma, negative_text, cached_negative
         if "timestep" not in kwargs or "encoder_hidden_states" not in kwargs:
             raise ValueError("Pinned keyword timestep and text conditioning required")
         sigma = _sigma(kwargs["timestep"])
@@ -108,19 +157,46 @@ def frozen_camera_difference(
                 or sigma != pending_sigma
             ):
                 raise RuntimeError("Native separate-pass CFG order changed")
+            negative_text = text
         state["native_calls"] += 1
         try:
-            with adapter.disabled():
-                baseline = original(*args, **kwargs)
+            if not positive and cached_negative is not None:
+                h, t, txt, result = cached_negative
+                cached_negative = None
+                if (
+                    txt is text
+                    and torch.equal(h, kwargs.get("hidden_states"))
+                    and torch.equal(t, kwargs.get("timestep"))
+                ):
+                    return result
+            baseline = None
+            if positive and can_batch(kwargs):
+                with adapter.disabled():
+                    baseline, negative_result = batched_frozen(args, kwargs)
+                cached_negative = (
+                    kwargs["hidden_states"],
+                    kwargs["timestep"],
+                    negative_text,
+                    negative_result,
+                )
+            if baseline is None:
+                with adapter.disabled():
+                    baseline = original(*args, **kwargs)
+            # negative-text calls and low-noise steps (sigma < camera_min_sigma) return the frozen baseline F0 untouched: the adapter
+            # only ever influences the positive prediction at the noise levels it was trained for.
             if not positive or sigma < active_min_sigma or camera_gain == 0:
                 return baseline
             if reference == "static":
                 adapter.set_condition(static)
                 null = original(*args, **kwargs)
             else:
+                # 'teacher' reference: the frozen positive prediction already computed above is the 'no camera' reference, which is
+                # exactly what pass A's target (teacher + edit) was built from, so training and inference use the same residual.
                 null = baseline
             adapter.set_condition(requested)
             controlled = original(*args, **kwargs)
+            # the native pipeline multiplies the positive prediction by text_guidance inside CFG (F_neg + g*(F_pos - F_neg)); dividing the
+            # residual by g here makes the net camera contribution exactly camera_gain * (F_requested - F_reference), independent of g.
             factor = camera_gain / text_guidance if cfg else camera_gain
             residual = controlled[0].float() - null[0].float()
             combined = (baseline[0].float() + factor * residual).to(

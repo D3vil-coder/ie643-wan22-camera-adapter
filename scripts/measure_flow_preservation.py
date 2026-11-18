@@ -4,6 +4,9 @@ Only optical-flow tracks already computed from the generated video are used to
 fit first-to-current homographies. Optional requested camera homographies are
 compared afterward and never affect image alignment. This is a diagnostic;
 it defines no automatic quality threshold and makes no FVD claim.
+
+    python scripts/measure_flow_preservation.py --input run/input.png --video run/video.mp4
+        --tracks run/flow.tracks.npz --output run/preservation.json [--request run/request.json] [--samples 13]
 """
 
 from __future__ import annotations
@@ -76,6 +79,9 @@ def _appearance_metrics(
 def _fit_observed_homography(
     tracks: np.ndarray, visible: np.ndarray, frame: int, width: int, height: int
 ) -> tuple[np.ndarray | None, dict]:
+    """Fit a first-to-current homography to the tracked points (RANSAC) so the input image can be warped
+    onto each sampled frame without using the requested camera.
+    """
     initial = tracks[0].astype(np.float64)
     current = tracks[frame].astype(np.float64)
     usable = visible[0].astype(bool) & visible[frame].astype(bool)
@@ -212,6 +218,9 @@ def measure(
     samples: int = 13,
     request_path: Path | None = None,
 ) -> dict:
+    """Appearance preservation of the input image in sampled frames of the video, after aligning with the observed
+    motion (SSIM, overlap, optional comparison with the requested homography).
+    """
     # OpenCV's Windows filename API can reject valid non-ASCII paths. Python
     # reads the exact path; OpenCV decodes the same bytes without path handling.
     input_bgr = cv2.imdecode(
@@ -407,6 +416,7 @@ def measure(
 
 
 def main() -> int:
+    """CLI entry; writes the json report (refuses to overwrite)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--input", required=True, type=Path, help="Exact inference input.png"

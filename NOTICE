@@ -1,0 +1,23 @@
+IE 643 camera-motion adapter v2 (virtual pan / tilt / zoom for Wan2.2 image-to-video)
+Copyright 2026 D3vil-coder / Neural Reaper Team
+
+Licensed under the Apache License, Version 2.0 (see the file LICENSE).
+
+Third-party material and its licences
+
+* Base model. The adapter is trained for, and used with, the frozen model Wan-AI/Wan2.2-TI2V-5B-Diffusers (Wan2.2), which is
+  released under the Apache License 2.0 by its authors. Its weights are not part of this repository; they are downloaded
+  separately from the Hugging Face Hub at the revision pinned in src/fpcamera/wan.py.
+
+* Photographs. The figures in docs/submission (figures/ and assets/) and the example frames in the report and poster contain
+  crops and thumbnails of photographs from the COCO 2017 dataset. COCO images are Flickr photographs released under various
+  Creative Commons licences and the COCO annotations are released under CC BY 4.0. These images remain under their original
+  image licences, which are not changed by the Apache License of this repository. data/flow_poc/pilot_sources.json and
+  data/v2/sources_v2.json list the COCO image id, Flickr URL and licence of every source photograph; the photographs
+  themselves are not distributed here.
+
+* Logos. The IIT Bombay and IE 643 logos in docs/submission/assets belong to their respective owners. They are included only
+  so that the course report and poster can be rebuilt, and the Apache License of this repository does not apply to them.
+
+* Software dependencies (PyTorch, diffusers, transformers, marimo, huggingface_hub and others listed in requirements*.txt) are
+  installed from their own distributions under their own licences and are not redistributed here.

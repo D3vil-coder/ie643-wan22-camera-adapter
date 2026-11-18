@@ -3,6 +3,12 @@
 The tracker sees decoded pixels only; optional requested homographies are
 loaded only after tracking has completed. This is a diagnostic, not a quality
 threshold or camera-control acceptance test.
+
+This is the repository's *tracker* (Shi-Tomasi corners + pyramidal Lucas-Kanade, forward/backward checked); ``summarize_flow_adherence.py`` and
+``calibrate_strength.measure_run_gain`` turn its tracks into the signed motion gain used by the strength calibration.
+
+    python scripts/measure_flow_video.py --video run/video.mp4 --output run/flow.json [--request run/request.json]
+    # writes run/flow.json and run/flow.tracks.npz (refuses to overwrite)
 """
 
 from __future__ import annotations
@@ -81,6 +87,10 @@ def _inside(points: np.ndarray, width: int, height: int) -> np.ndarray:
 
 
 def track_video(video_path: Path) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray]:
+    """Track sparse features (Shi-Tomasi corners, pyramidal Lucas-Kanade with a forward/backward consistency check) through the
+    decoded video; returns ``(report, tracks_xy, visibility, initial_queries)``.  Sees pixels only; requested homographies are
+    never used here.
+    """
     cap = cv2.VideoCapture(str(video_path))
     if not cap.isOpened():
         raise OSError(f"Could not open video: {video_path}")
@@ -426,6 +436,7 @@ def compare_request(
 
 
 def main() -> int:
+    """CLI entry; writes the report json and a ``.tracks.npz`` archive (refuses to overwrite)."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--video", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)

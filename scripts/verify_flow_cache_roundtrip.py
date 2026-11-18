@@ -2,6 +2,8 @@
 
 Read-only with respect to caches, training state, checkpoints, and model weights.
 The script requires the already-cached pinned Wan VAE and never downloads it.
+
+    python scripts/verify_flow_cache_roundtrip.py --project-root .
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ SAMPLE_FRAMES = (0, 40, 80, 120)
 
 
 def sha256(path: Path) -> str:
+    """Streaming sha256 of a file."""
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(8 << 20), b""):
@@ -63,6 +66,7 @@ def _frame_metrics(
 
 
 def verify(root: Path) -> dict:
+    """Decode two cached clips with the Wan VAE and compare them with the exact RGB targets re-rendered from the sources; returns the report."""
     root = root.resolve()
     index_path = root / "data/flow_poc/cache_1280x704_f121_v1/index.jsonl"
     manifest_path = root / "data/flow_poc/pilot_sources.json"
@@ -334,6 +338,7 @@ def verify(root: Path) -> dict:
 
 
 def main() -> int:
+    """CLI entry; prints the report."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--project-root", type=Path, default=Path(__file__).resolve().parents[1]
